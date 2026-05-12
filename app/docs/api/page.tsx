@@ -173,6 +173,24 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-otp" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
+
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="font-medium">GET /api/public/email-addresses/:email/latest-links</div>
+                  <div className="mt-2">Mengambil semua link dari `html_body` email terakhir.</div>
+                </div>
+                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+{`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-links" \\
+  -H "Authorization: Bearer YOUR_API_KEY"`}
+                </pre>
+
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="font-medium">GET /api/public/email-addresses/:email/latest-primary-link</div>
+                  <div className="mt-2">Mengambil link utama dari email terakhir, cocok untuk verify/confirm/reset link.</div>
+                </div>
+                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+{`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-primary-link" \\
+  -H "Authorization: Bearer YOUR_API_KEY"`}
+                </pre>
               </div>
             </Card>
 
