@@ -1,6 +1,7 @@
 interface Env {
   INBOUND_API_URL: string;
   INBOUND_EMAIL_SECRET: string;
+  VERCEL_AUTOMATION_BYPASS_SECRET?: string;
 }
 
 interface WorkerEmailHeaders {
@@ -36,7 +37,12 @@ export default {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${env.INBOUND_EMAIL_SECRET}`
+        Authorization: `Bearer ${env.INBOUND_EMAIL_SECRET}`,
+        ...(env.VERCEL_AUTOMATION_BYPASS_SECRET
+          ? {
+              "x-vercel-protection-bypass": env.VERCEL_AUTOMATION_BYPASS_SECRET
+            }
+          : {})
       },
       body: JSON.stringify(payload)
     });

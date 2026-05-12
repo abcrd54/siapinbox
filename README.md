@@ -120,7 +120,10 @@ Permission yang saat ini dipakai:
 ```env
 INBOUND_API_URL=https://your-app-domain/api/inbound-email
 INBOUND_EMAIL_SECRET=same-value-as-nextjs
+VERCEL_AUTOMATION_BYPASS_SECRET=optional_if_vercel_protection_is_enabled
 ```
+
+Jika endpoint Vercel dilindungi Deployment Protection, aktifkan `Protection Bypass for Automation` di project Vercel lalu isi `VERCEL_AUTOMATION_BYPASS_SECRET` di Worker. Worker ini otomatis mengirim header `x-vercel-protection-bypass` jika env tersebut tersedia.
 
 ## Catatan Implementasi
 

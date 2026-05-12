@@ -75,8 +75,16 @@ export default function ApiDocsPage() {
               <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Cloudflare Worker Env</h3>
               <pre className="overflow-x-auto rounded-2xl bg-slate-50 p-4 text-xs text-slate-700">
 {`INBOUND_API_URL=${env.publicAppUrl}/api/inbound-email
-INBOUND_EMAIL_SECRET=<same value as Next.js>`}
+INBOUND_EMAIL_SECRET=<same value as Next.js>
+VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
               </pre>
+              <p className="text-sm text-slate-600">
+                Jika project Vercel memakai Deployment Protection, Worker harus mengirim header
+                {" "}
+                <code>x-vercel-protection-bypass</code>
+                {" "}
+                dengan secret automation bypass dari Vercel.
+              </p>
             </section>
           </Card>
 
