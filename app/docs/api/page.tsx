@@ -95,6 +95,23 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                 <div className="font-medium">POST /api/inbound-email</div>
                 <div className="mt-2">Dipanggil oleh Cloudflare Email Worker untuk menyimpan email masuk.</div>
               </div>
+              <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+                <div className="mb-2 font-medium">Request Format</div>
+                <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "message_id": "<message-id>",
+  "from_email": "sender@example.com",
+  "from_name": "Sender Name",
+  "to_email": "lead-8xk29@${env.appDomain}",
+  "subject": "Test Email",
+  "text_body": "Hello from email",
+  "html_body": "<p>Hello from email</p>",
+  "raw_headers": {},
+  "raw_payload": {},
+  "attachments": []
+}`}
+                </pre>
+              </div>
               <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
 {`curl -X POST "${env.publicAppUrl}/api/inbound-email" \\
   -H "Content-Type: application/json" \\
@@ -111,6 +128,15 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
     "raw_payload": {}
   }'`}
               </pre>
+              <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+                <div className="mb-2 font-medium">Success Response</div>
+                <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "success": true,
+  "email_id": "uuid"
+}`}
+                </pre>
+              </div>
             </Card>
 
             <Card className="space-y-4">
@@ -128,9 +154,25 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
     "local_part": "support-project-a",
     "project": "project-a",
     "label": "Support Project A",
-    "purpose": "Fixed address for support testing"
+                    "purpose": "Fixed address for support testing"
   }'`}
                 </pre>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="mb-2 font-medium">Response Format</div>
+                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "email_address": {
+    "id": "uuid",
+    "email": "support-project-a@${env.appDomain}",
+    "local_part": "support-project-a",
+    "label": "Support Project A",
+    "project": "project-a",
+    "status": "active",
+    "created_at": "2026-05-13T10:00:00Z"
+  }
+}`}
+                  </pre>
+                </div>
 
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="font-medium">POST /api/public/email-addresses/random</div>
@@ -146,6 +188,14 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
     "label": "OTP Test"
   }'`}
                 </pre>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="mb-2 font-medium">Response Format</div>
+                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "email": "otp-test-7fk29@${env.appDomain}"
+}`}
+                  </pre>
+                </div>
 
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/messages</div>
@@ -155,6 +205,25 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/messages" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="mb-2 font-medium">Response Format</div>
+                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "messages": [
+    {
+      "id": "uuid",
+      "from_email": "noreply@example.com",
+      "from_name": "No Reply",
+      "subject": "Verify your email",
+      "text_body": "Click the button below",
+      "html_body": "<a href=\\"https://example.com\\">Verify</a>",
+      "received_at": "2026-05-13T10:00:00Z",
+      "status": "unread"
+    }
+  ]
+}`}
+                  </pre>
+                </div>
 
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest</div>
@@ -164,6 +233,23 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="mb-2 font-medium">Response Format</div>
+                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "message": {
+    "id": "uuid",
+    "subject": "Your OTP Code",
+    "text_body": "Your code is 123456",
+    "html_body": "<p>Your code is <b>123456</b></p>",
+    "received_at": "2026-05-13T10:00:00Z",
+    "from_email": "noreply@example.com",
+    "from_name": null,
+    "status": "unread"
+  }
+}`}
+                  </pre>
+                </div>
 
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest-otp</div>
@@ -173,6 +259,16 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-otp" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="mb-2 font-medium">Response Format</div>
+                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "otp": "123456",
+  "source_message_id": "uuid",
+  "received_at": "2026-05-13T10:00:00Z"
+}`}
+                  </pre>
+                </div>
 
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest-links</div>
@@ -182,6 +278,22 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-links" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="mb-2 font-medium">Response Format</div>
+                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "message_id": "uuid",
+  "subject": "Verify your email",
+  "received_at": "2026-05-13T10:00:00Z",
+  "links": [
+    {
+      "url": "https://example.com/verify?token=abc",
+      "text": "Verify Email"
+    }
+  ]
+}`}
+                  </pre>
+                </div>
 
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest-primary-link</div>
@@ -191,6 +303,20 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-primary-link" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="mb-2 font-medium">Response Format</div>
+                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+{`{
+  "message_id": "uuid",
+  "subject": "Verify your email",
+  "received_at": "2026-05-13T10:00:00Z",
+  "link": {
+    "url": "https://example.com/verify?token=abc",
+    "text": "Verify Email"
+  }
+}`}
+                  </pre>
+                </div>
               </div>
             </Card>
 
