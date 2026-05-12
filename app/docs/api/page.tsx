@@ -15,7 +15,7 @@ const sections = [
   {
     title: "Public Permissions",
     items: [
-      "`addresses:create` untuk membuat random email dari platform lain.",
+      "`addresses:create` untuk membuat random atau custom email dari platform lain.",
       "`emails:read` untuk membaca messages, latest message, dan latest OTP."
     ]
   }
@@ -108,6 +108,22 @@ INBOUND_EMAIL_SECRET=<same value as Next.js>`}
             <Card className="space-y-4">
               <h2 className="text-xl font-semibold">Public API</h2>
               <div className="space-y-4 text-sm text-slate-700">
+                <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="font-medium">POST /api/public/email-addresses</div>
+                  <div className="mt-2">Membuat custom email address tetap dengan `local_part` tertentu.</div>
+                </div>
+                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+{`curl -X POST "${publicBaseUrl}/email-addresses" \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "local_part": "support-project-a",
+    "project": "project-a",
+    "label": "Support Project A",
+    "purpose": "Fixed address for support testing"
+  }'`}
+                </pre>
+
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <div className="font-medium">POST /api/public/email-addresses/random</div>
                   <div className="mt-2">Membuat random email address untuk automation atau OTP flow.</div>
