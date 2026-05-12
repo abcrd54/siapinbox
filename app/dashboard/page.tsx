@@ -2,61 +2,62 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 
-import { AppShell } from "@/components/AppShell";
-import { Card } from "@/components/ui";
-import { StatsGrid } from "@/components/StatsGrid";
+import { LogoutButton } from "@/components/LogoutButton";
+import { QuickCreateAddress } from "@/components/QuickCreateAddress";
+import { InboxWorkspace } from "@/components/InboxWorkspace";
+import { RefreshButton } from "@/components/RefreshButton";
 import { requireDashboardAuth } from "@/lib/auth";
-import { getOverviewStats } from "@/lib/data";
-import { formatDate } from "@/lib/utils";
+import { getEmailAddresses, getMessageById, getMessagesForAddress } from "@/lib/data";
+import { env } from "@/lib/env";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams
+}: {
+  searchParams?: Promise<{ address?: string; email?: string }>;
+}) {
   await requireDashboardAuth();
-  const stats = await getOverviewStats();
+  const params = (await searchParams) || {};
+  const addresses = await getEmailAddresses();
+  const selectedAddress = addresses.find((item) => item.id === params.address) || addresses[0] || null;
+  const messages = selectedAddress ? await getMessagesForAddress(selectedAddress.id, { limit: 100 }) : [];
+  const selectedMessage = messages.find((item) => item.id === params.email) || messages[0] || null;
+  const selectedEmail = selectedMessage ? await getMessageById(selectedMessage.id) : null;
 
   return (
-    <AppShell title="Inbox Operations" subtitle="Monitor alamat email aktif, pesan masuk, dan health inbox internal.">
-      <StatsGrid
-        items={[
-          { label: "Total Addresses", value: stats.totalAddresses },
-          { label: "Active Addresses", value: stats.activeAddresses },
-          { label: "Total Messages", value: stats.totalMessages },
-          { label: "Unread Messages", value: stats.unreadMessages }
-        ]}
-      />
-
-      <Card className="space-y-5">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-semibold">Latest Received Emails</h2>
-            <p className="mt-2 text-sm text-slate-600">Snapshot pesan terbaru yang masuk ke sistem.</p>
+    <main className="flex min-h-screen flex-col p-4">
+      <div className="mb-4 flex flex-col gap-4 rounded-[32px] bg-ink px-5 py-5 text-white shadow-panel lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-2">
+          <div className="inline-flex rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/80">
+            SiapInbox
           </div>
-          <Link href="/dashboard/addresses" className="text-sm font-medium text-ember">
-            Manage addresses
-          </Link>
+          <div>
+            <h1 className="text-2xl font-semibold">Inbox Workspace</h1>
+            <p className="text-sm text-white/65">Domain aktif: @{env.appDomain}</p>
+          </div>
         </div>
+        <div className="flex flex-col gap-3 lg:items-end">
+          <QuickCreateAddress />
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-white/50">Layout fokus inbox, tanpa banyak menu.</span>
+            <Link
+              href="/docs/api"
+              className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/85 transition hover:bg-white/10"
+            >
+              API Docs
+            </Link>
+            <RefreshButton />
+            <LogoutButton />
+          </div>
+        </div>
+      </div>
 
-        <div className="grid gap-4">
-          {stats.latestMessages.length ? (
-            stats.latestMessages.map((message) => (
-              <div key={message.id} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                  <div className="space-y-1">
-                    <div className="font-medium">{message.subject || "(Tanpa subject)"}</div>
-                    <div className="text-sm text-slate-600">
-                      {message.from_email} ke {message.to_email}
-                    </div>
-                  </div>
-                  <div className="text-sm text-slate-500">{formatDate(message.received_at)}</div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="rounded-2xl border border-dashed border-slate-200 p-8 text-center text-sm text-slate-500">
-              Belum ada email masuk.
-            </div>
-          )}
-        </div>
-      </Card>
-    </AppShell>
+      <InboxWorkspace
+        addresses={addresses}
+        selectedAddressId={selectedAddress?.id || null}
+        messages={messages}
+        selectedMessageId={selectedMessage?.id || null}
+        selectedEmail={selectedEmail}
+      />
+    </main>
   );
 }

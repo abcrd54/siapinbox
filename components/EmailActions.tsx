@@ -10,11 +10,13 @@ const statuses = ["unread", "read", "archived", "spam", "follow_up", "done"];
 export function EmailActions({
   emailId,
   currentStatus,
-  currentLabel
+  currentLabel,
+  compact = false
 }: {
   emailId: string;
   currentStatus: string;
   currentLabel: string;
+  compact?: boolean;
 }) {
   const router = useRouter();
   const [status, setStatus] = useState(currentStatus);
@@ -36,7 +38,7 @@ export function EmailActions({
   }
 
   return (
-    <div className="flex flex-col gap-3 md:flex-row md:items-center">
+    <div className={`flex gap-3 ${compact ? "flex-col xl:flex-row xl:items-center" : "flex-col md:flex-row md:items-center"}`}>
       <select
         value={status}
         onChange={(event) => setStatus(event.target.value)}
@@ -48,8 +50,8 @@ export function EmailActions({
           </option>
         ))}
       </select>
-      <Input value={label} onChange={(event) => setLabel(event.target.value)} placeholder="Label email" />
-      <Button type="button" onClick={save} disabled={pending}>
+      <Input value={label} onChange={(event) => setLabel(event.target.value)} placeholder="Label email" className={compact ? "xl:min-w-48" : ""} />
+      <Button type="button" onClick={save} disabled={pending} className={compact ? "xl:self-auto" : ""}>
         {pending ? "Saving..." : "Save"}
       </Button>
     </div>

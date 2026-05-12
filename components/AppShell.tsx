@@ -6,8 +6,7 @@ import { env } from "@/lib/env";
 import { LogoutButton } from "./LogoutButton";
 
 const links = [
-  { href: "/dashboard", label: "Overview" },
-  { href: "/dashboard/addresses", label: "Addresses" },
+  { href: "/dashboard", label: "Inbox" },
   { href: "/dashboard/api-keys", label: "API Keys" }
 ];
 
