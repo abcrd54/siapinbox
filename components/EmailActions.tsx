@@ -1,0 +1,57 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { Button, Input } from "@/components/ui";
+
+const statuses = ["unread", "read", "archived", "spam", "follow_up", "done"];
+
+export function EmailActions({
+  emailId,
+  currentStatus,
+  currentLabel
+}: {
+  emailId: string;
+  currentStatus: string;
+  currentLabel: string;
+}) {
+  const router = useRouter();
+  const [status, setStatus] = useState(currentStatus);
+  const [label, setLabel] = useState(currentLabel);
+  const [pending, setPending] = useState(false);
+
+  async function save() {
+    setPending(true);
+    await fetch(`/api/emails/${emailId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ status, label })
+    });
+
+    setPending(false);
+    router.refresh();
+  }
+
+  return (
+    <div className="flex flex-col gap-3 md:flex-row md:items-center">
+      <select
+        value={status}
+        onChange={(event) => setStatus(event.target.value)}
+        className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+      >
+        {statuses.map((item) => (
+          <option key={item} value={item}>
+            {item}
+          </option>
+        ))}
+      </select>
+      <Input value={label} onChange={(event) => setLabel(event.target.value)} placeholder="Label email" />
+      <Button type="button" onClick={save} disabled={pending}>
+        {pending ? "Saving..." : "Save"}
+      </Button>
+    </div>
+  );
+}
