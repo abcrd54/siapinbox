@@ -35,24 +35,24 @@ export default async function ApiDocsPage() {
   const publicBaseUrl = `${appUrl}/api/public`;
 
   return (
-    <main className="min-h-screen px-4 py-6 md:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <Card className="overflow-hidden bg-ink p-0 text-white">
-          <div className="flex flex-col gap-4 p-6 md:flex-row md:items-end md:justify-between">
+    <main className="min-h-screen px-4 py-5 md:px-6">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5">
+        <Card className="overflow-hidden p-0">
+          <div className="flex flex-col gap-4 border-b border-line p-5 md:flex-row md:items-end md:justify-between">
             <div className="space-y-3">
-              <div className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
+              <div className="inline-flex rounded-md border border-line bg-slate-50 px-2 py-1 text-xs font-semibold uppercase text-muted">
                 SiapInbox API
               </div>
               <div>
-                <h1 className="text-3xl font-semibold">API Docs</h1>
-                <p className="mt-2 max-w-3xl text-sm text-white/70">
+                <h1 className="text-2xl font-semibold text-ink">API Docs</h1>
+                <p className="mt-2 max-w-3xl text-sm text-muted">
                   Dokumentasi lengkap untuk dashboard API, public API, dan inbound endpoint dari Cloudflare Worker.
                 </p>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <Link href="/dashboard" className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/85 transition hover:bg-white/10">
+              <Link href="/dashboard" className="rounded-md border border-line px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100">
                 Back to Inbox
               </Link>
             </div>
@@ -72,7 +72,7 @@ export default async function ApiDocsPage() {
 
             {sections.map((section) => (
               <section key={section.title} className="space-y-3">
-                <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{section.title}</h3>
+                <h3 className="text-xs font-semibold uppercase text-muted">{section.title}</h3>
                 <div className="space-y-2 text-sm text-slate-700">
                   {section.items.map((item) => (
                     <p key={item}>{item}</p>
@@ -82,8 +82,8 @@ export default async function ApiDocsPage() {
             ))}
 
             <section className="space-y-3">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Cloudflare Worker Env</h3>
-              <pre className="overflow-x-auto rounded-2xl bg-slate-50 p-4 text-xs text-slate-700">
+              <h3 className="text-xs font-semibold uppercase text-muted">Cloudflare Worker Env</h3>
+              <pre className="overflow-x-auto rounded-lg border border-line bg-slate-50 p-4 text-xs text-slate-700">
 {`INBOUND_API_URL=${appUrl}/api/inbound-email
 INBOUND_EMAIL_SECRET=<same value as Next.js>
 VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
@@ -101,13 +101,13 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
           <div className="space-y-6">
             <Card className="space-y-4">
               <h2 className="text-xl font-semibold">Inbound Endpoint</h2>
-              <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+              <div className="rounded-lg bg-slate-50 p-4 text-sm text-slate-700">
                 <div className="font-medium">POST /api/inbound-email</div>
                 <div className="mt-2">Dipanggil oleh Cloudflare Email Worker untuk menyimpan email masuk.</div>
               </div>
-              <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+              <div className="rounded-lg bg-slate-50 p-4 text-sm text-slate-700">
                 <div className="mb-2 font-medium">Request Format</div>
-                <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "message_id": "<message-id>",
   "from_email": "sender@example.com",
@@ -122,7 +122,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 }`}
                 </pre>
               </div>
-              <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+              <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl -X POST "${appUrl}/api/inbound-email" \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer INBOUND_EMAIL_SECRET" \\
@@ -138,9 +138,9 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
     "raw_payload": {}
   }'`}
               </pre>
-              <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+              <div className="rounded-lg bg-slate-50 p-4 text-sm text-slate-700">
                 <div className="mb-2 font-medium">Success Response</div>
-                <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "success": true,
   "email_id": "uuid"
@@ -152,11 +152,11 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
             <Card className="space-y-4">
               <h2 className="text-xl font-semibold">Public API</h2>
               <div className="space-y-4 text-sm text-slate-700">
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">POST /api/public/email-addresses</div>
                   <div className="mt-2">Membuat custom email address tetap dengan `local_part` tertentu.</div>
                 </div>
-                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl -X POST "${publicBaseUrl}/email-addresses" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
@@ -167,9 +167,9 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                     "purpose": "Fixed address for support testing"
   }'`}
                 </pre>
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="mb-2 font-medium">Response Format</div>
-                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                  <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "email_address": {
     "id": "uuid",
@@ -184,11 +184,11 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   </pre>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">POST /api/public/email-addresses/random</div>
                   <div className="mt-2">Membuat random email address untuk automation atau OTP flow.</div>
                 </div>
-                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl -X POST "${publicBaseUrl}/email-addresses/random" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
@@ -198,26 +198,26 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
     "label": "OTP Test"
   }'`}
                 </pre>
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="mb-2 font-medium">Response Format</div>
-                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                  <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "email": "otp-test-7fk29@${env.appDomain}"
 }`}
                   </pre>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/messages</div>
                   <div className="mt-2">Mengambil daftar message berdasarkan email address.</div>
                 </div>
-                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/messages" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="mb-2 font-medium">Response Format</div>
-                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                  <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "messages": [
     {
@@ -235,17 +235,17 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   </pre>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest</div>
                   <div className="mt-2">Mengambil email terbaru. Cocok untuk polling OTP.</div>
                 </div>
-                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="mb-2 font-medium">Response Format</div>
-                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                  <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "message": {
     "id": "uuid",
@@ -261,17 +261,17 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   </pre>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest-otp</div>
                   <div className="mt-2">Mencari OTP 4-8 digit dari beberapa email terbaru.</div>
                 </div>
-                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-otp" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="mb-2 font-medium">Response Format</div>
-                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                  <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "otp": "123456",
   "source_message_id": "uuid",
@@ -280,17 +280,17 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   </pre>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest-links</div>
                   <div className="mt-2">Mengambil semua link dari `html_body` email terakhir.</div>
                 </div>
-                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-links" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="mb-2 font-medium">Response Format</div>
-                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                  <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "message_id": "uuid",
   "subject": "Verify your email",
@@ -305,17 +305,17 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   </pre>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">GET /api/public/email-addresses/:email/latest-primary-link</div>
                   <div className="mt-2">Mengambil link utama dari email terakhir, cocok untuk verify/confirm/reset link.</div>
                 </div>
-                <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
+                <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-primary-link" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
-                <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="rounded-lg bg-slate-50 p-4">
                   <div className="mb-2 font-medium">Response Format</div>
-                  <pre className="overflow-x-auto rounded-2xl bg-white p-4 text-xs text-slate-700">
+                  <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
   "message_id": "uuid",
   "subject": "Verify your email",
@@ -347,3 +347,4 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
     </main>
   );
 }
+

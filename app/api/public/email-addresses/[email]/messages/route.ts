@@ -19,7 +19,7 @@ export async function GET(
   const { searchParams } = new URL(request.url);
   const limit = parseLimit(searchParams.get("limit"));
 
-  const { address, response } = await getReadableAddressForApiKey(decodedEmail, apiKey);
+  const { address, response } = await getReadableAddressForApiKey(decodedEmail);
   if (response) {
     return response;
   }

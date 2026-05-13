@@ -17,7 +17,7 @@ export async function GET(
   const { email } = await params;
   const decodedEmail = decodeURIComponent(email).toLowerCase();
 
-  const { address, response } = await getReadableAddressForApiKey(decodedEmail, apiKey);
+  const { address, response } = await getReadableAddressForApiKey(decodedEmail);
   if (response) {
     return response;
   }

@@ -74,24 +74,24 @@ export function ApiKeyManager({ items }: { items: ApiKeyItem[] }) {
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+    <div className="grid gap-5 xl:grid-cols-[0.85fr_1.15fr]">
       <Card>
         <div className="mb-6">
-          <h2 className="text-xl font-semibold">Create API Key</h2>
-          <p className="mt-2 text-sm text-slate-600">Key hanya ditampilkan sekali setelah dibuat. Simpan di platform yang membutuhkannya.</p>
+          <h2 className="text-lg font-semibold">Create API Key</h2>
+          <p className="mt-1 text-sm text-muted">Key hanya ditampilkan sekali setelah dibuat. Simpan di platform yang membutuhkannya.</p>
         </div>
 
         <form className="space-y-4" onSubmit={createKey}>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Name</label>
+            <label className="text-sm font-semibold">Name</label>
             <Input value={name} onChange={(event) => setName(event.target.value)} required />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Project</label>
+            <label className="text-sm font-semibold">Project</label>
             <Input value={project} onChange={(event) => setProject(event.target.value)} />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Permissions</label>
+            <label className="text-sm font-semibold">Permissions</label>
             <Input
               value={permissions}
               onChange={(event) => setPermissions(event.target.value)}
@@ -100,7 +100,7 @@ export function ApiKeyManager({ items }: { items: ApiKeyItem[] }) {
           </div>
 
           {error ? <p className="text-sm text-rose-600">{error}</p> : null}
-          {newKey ? <p className="break-all text-sm text-emerald-700">API key baru: {newKey}</p> : null}
+          {newKey ? <p className="rounded-md border border-emerald-200 bg-emerald-50 p-3 break-all text-sm text-emerald-700">API key baru: {newKey}</p> : null}
 
           <Button type="submit" disabled={pending}>
             {pending ? "Membuat..." : "Create key"}
@@ -111,29 +111,29 @@ export function ApiKeyManager({ items }: { items: ApiKeyItem[] }) {
       <Card className="overflow-hidden p-0">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-slate-50 text-left text-slate-500">
-              <tr>
-                <th className="px-5 py-4 font-medium">Name</th>
-                <th className="px-5 py-4 font-medium">Project</th>
-                <th className="px-5 py-4 font-medium">Permissions</th>
-                <th className="px-5 py-4 font-medium">Status</th>
-                <th className="px-5 py-4 font-medium">Last used</th>
-                <th className="px-5 py-4 font-medium">Action</th>
+          <thead className="border-b border-line bg-slate-50 text-left text-xs uppercase text-muted">
+            <tr>
+                <th className="px-4 py-3 font-semibold">Name</th>
+                <th className="px-4 py-3 font-semibold">Project</th>
+                <th className="px-4 py-3 font-semibold">Permissions</th>
+                <th className="px-4 py-3 font-semibold">Status</th>
+                <th className="px-4 py-3 font-semibold">Last used</th>
+                <th className="px-4 py-3 font-semibold">Action</th>
               </tr>
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item.id} className="border-t border-slate-100">
-                  <td className="px-5 py-4 font-medium">{item.name}</td>
-                  <td className="px-5 py-4 text-slate-600">{item.project || "-"}</td>
-                  <td className="px-5 py-4 text-slate-600">{item.permissions.join(", ")}</td>
-                  <td className="px-5 py-4">
+                <tr key={item.id} className="border-b border-line transition hover:bg-slate-50">
+                  <td className="px-4 py-3 font-semibold">{item.name}</td>
+                  <td className="px-4 py-3 text-slate-600">{item.project || "-"}</td>
+                  <td className="px-4 py-3 text-slate-600">{item.permissions.join(", ")}</td>
+                  <td className="px-4 py-3">
                     <StatusBadge value={item.status} />
                   </td>
-                  <td className="px-5 py-4 text-slate-600">{formatDate(item.last_used_at)}</td>
-                  <td className="px-5 py-4">
+                  <td className="px-4 py-3 text-slate-600">{formatDate(item.last_used_at)}</td>
+                  <td className="px-4 py-3">
                     {item.status === "active" ? (
-                      <button type="button" className="font-medium text-rose-600" onClick={() => revokeKey(item.id)}>
+                      <button type="button" className="font-semibold text-danger hover:text-rose-800" onClick={() => revokeKey(item.id)}>
                         Revoke
                       </button>
                     ) : (

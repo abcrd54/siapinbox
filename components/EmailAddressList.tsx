@@ -20,32 +20,32 @@ export function EmailAddressList({ items }: { items: EmailAddressListItem[] }) {
     <Card className="overflow-hidden p-0">
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-50 text-left text-slate-500">
+          <thead className="border-b border-line bg-slate-50 text-left text-xs uppercase text-muted">
             <tr>
-              <th className="px-5 py-4 font-medium">Email</th>
-              <th className="px-5 py-4 font-medium">Label</th>
-              <th className="px-5 py-4 font-medium">Project</th>
-              <th className="px-5 py-4 font-medium">Status</th>
-              <th className="px-5 py-4 font-medium">Messages</th>
-              <th className="px-5 py-4 font-medium">Created</th>
-              <th className="px-5 py-4 font-medium">Action</th>
+              <th className="px-4 py-3 font-semibold">Email</th>
+              <th className="px-4 py-3 font-semibold">Label</th>
+              <th className="px-4 py-3 font-semibold">Project</th>
+              <th className="px-4 py-3 font-semibold">Status</th>
+              <th className="px-4 py-3 font-semibold">Messages</th>
+              <th className="px-4 py-3 font-semibold">Created</th>
+              <th className="px-4 py-3 font-semibold">Action</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => (
-              <tr key={item.id} className="border-t border-slate-100">
-                <td className="px-5 py-4 font-medium">{item.email}</td>
-                <td className="px-5 py-4 text-slate-600">{item.label || "-"}</td>
-                <td className="px-5 py-4 text-slate-600">{item.project || "-"}</td>
-                <td className="px-5 py-4">
+              <tr key={item.id} className="border-b border-line transition hover:bg-slate-50">
+                <td className="px-4 py-3 font-semibold">{item.email}</td>
+                <td className="px-4 py-3 text-slate-600">{item.label || "-"}</td>
+                <td className="px-4 py-3 text-slate-600">{item.project || "-"}</td>
+                <td className="px-4 py-3">
                   <StatusBadge value={item.status} />
                 </td>
-                <td className="px-5 py-4 text-slate-600">
+                <td className="px-4 py-3 text-slate-600">
                   {item.total_messages} total / {item.unread_messages} unread
                 </td>
-                <td className="px-5 py-4 text-slate-600">{formatDate(item.created_at)}</td>
-                <td className="px-5 py-4">
-                  <Link href={`/dashboard/addresses/${item.id}`} className="font-medium text-ember">
+                <td className="px-4 py-3 text-slate-600">{formatDate(item.created_at)}</td>
+                <td className="px-4 py-3">
+                  <Link href={`/dashboard/addresses/${item.id}`} className="font-semibold text-accent hover:text-blue-800">
                     View inbox
                   </Link>
                 </td>

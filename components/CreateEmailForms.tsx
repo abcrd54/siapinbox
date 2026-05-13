@@ -67,31 +67,31 @@ export function CreateEmailForms() {
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+    <div className="grid gap-5 xl:grid-cols-[0.75fr_1.25fr]">
       <Card className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold">Create Address</h2>
-          <p className="mt-2 text-sm text-slate-600">Buat alamat random untuk testing cepat atau custom untuk alamat tetap.</p>
+          <h2 className="text-lg font-semibold">Create Address</h2>
+          <p className="mt-1 text-sm text-muted">Buat alamat random untuk testing cepat atau custom untuk alamat tetap.</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 p-1">
           <button
             type="button"
             onClick={() => setMode("random")}
-            className={`rounded-2xl px-4 py-3 text-sm font-medium ${mode === "random" ? "bg-ink text-white" : "bg-slate-100 text-slate-700"}`}
+            className={`rounded-md px-3 py-2 text-sm font-semibold transition ${mode === "random" ? "bg-white text-ink shadow-sm" : "text-slate-600 hover:text-ink"}`}
           >
             Random
           </button>
           <button
             type="button"
             onClick={() => setMode("custom")}
-            className={`rounded-2xl px-4 py-3 text-sm font-medium ${mode === "custom" ? "bg-ink text-white" : "bg-slate-100 text-slate-700"}`}
+            className={`rounded-md px-3 py-2 text-sm font-semibold transition ${mode === "custom" ? "bg-white text-ink shadow-sm" : "text-slate-600 hover:text-ink"}`}
           >
             Custom
           </button>
         </div>
 
-        <div className="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+        <div className="rounded-md border border-line bg-slate-50 p-3 text-sm text-slate-600">
           {mode === "random"
             ? "Format random: {prefix}-{random}@domain. Cocok untuk OTP, lead, dan test automation."
             : "Format custom: local_part@domain. Cocok untuk inbox tetap seperti support, demo, atau client-specific."}
@@ -102,7 +102,7 @@ export function CreateEmailForms() {
         <form className="space-y-4" onSubmit={submit}>
           {mode === "random" ? (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Prefix</label>
+              <label className="text-sm font-semibold">Prefix</label>
               <Input
                 value={state.prefix}
                 onChange={(event) => setState((current) => ({ ...current, prefix: event.target.value }))}
@@ -111,7 +111,7 @@ export function CreateEmailForms() {
             </div>
           ) : (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Local Part</label>
+              <label className="text-sm font-semibold">Local Part</label>
               <Input
                 value={state.localPart}
                 onChange={(event) => setState((current) => ({ ...current, localPart: event.target.value }))}
@@ -123,7 +123,7 @@ export function CreateEmailForms() {
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Label</label>
+              <label className="text-sm font-semibold">Label</label>
               <Input
                 value={state.label}
                 onChange={(event) => setState((current) => ({ ...current, label: event.target.value }))}
@@ -131,7 +131,7 @@ export function CreateEmailForms() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Project</label>
+              <label className="text-sm font-semibold">Project</label>
               <Input
                 value={state.project}
                 onChange={(event) => setState((current) => ({ ...current, project: event.target.value }))}
@@ -141,7 +141,7 @@ export function CreateEmailForms() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Purpose</label>
+            <label className="text-sm font-semibold">Purpose</label>
             <Textarea
               value={state.purpose}
               onChange={(event) => setState((current) => ({ ...current, purpose: event.target.value }))}

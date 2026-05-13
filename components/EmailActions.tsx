@@ -42,7 +42,7 @@ export function EmailActions({
       <select
         value={status}
         onChange={(event) => setStatus(event.target.value)}
-        className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm"
+        className="h-10 rounded-md border border-line bg-white px-3 text-sm outline-none transition focus:border-accent focus:shadow-focus"
       >
         {statuses.map((item) => (
           <option key={item} value={item}>

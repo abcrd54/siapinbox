@@ -2,18 +2,8 @@ import { jsonError } from "@/lib/http";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import type { ApiKeyRecord } from "@/lib/types";
 
-export class PublicApiError extends Error {
-  constructor(message: string, public status: number) {
-    super(message);
-  }
-}
-
 export function resolveApiKeyProject(apiKey: ApiKeyRecord, requestedProject?: string) {
-  if (apiKey.project && requestedProject && requestedProject !== apiKey.project) {
-    throw new PublicApiError("Forbidden", 403);
-  }
-
-  return apiKey.project || requestedProject;
+  return requestedProject || apiKey.project;
 }
 
 export function parseLimit(value: string | null, fallback = 20, max = 100) {
@@ -30,7 +20,7 @@ export function parseLimit(value: string | null, fallback = 20, max = 100) {
   return Math.min(parsed, max);
 }
 
-export async function getReadableAddressForApiKey(email: string, apiKey: ApiKeyRecord) {
+export async function getReadableAddressForApiKey(email: string) {
   const { data: address, error } = await supabaseAdmin
     .from("email_addresses")
     .select("id, project")
@@ -43,10 +33,6 @@ export async function getReadableAddressForApiKey(email: string, apiKey: ApiKeyR
 
   if (!address) {
     return { address: null, response: jsonError("Email address not found", 404) };
-  }
-
-  if (apiKey.project && address.project !== apiKey.project) {
-    return { address: null, response: jsonError("Forbidden", 403) };
   }
 
   return { address, response: null };

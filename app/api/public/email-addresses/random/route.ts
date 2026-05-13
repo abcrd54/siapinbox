@@ -1,7 +1,7 @@
 import { authenticateApiKey } from "@/lib/api-key";
 import { buildEmailAddress, generateUniqueLocalPart } from "@/lib/email-generator";
 import { getBearerToken, jsonError, jsonOk } from "@/lib/http";
-import { PublicApiError, resolveApiKeyProject } from "@/lib/public-api";
+import { resolveApiKeyProject } from "@/lib/public-api";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { createRandomEmailSchema } from "@/lib/validation";
 
@@ -41,10 +41,6 @@ export async function POST(request: Request) {
 
     return jsonOk({ email }, { status: 201 });
   } catch (error) {
-    if (error instanceof PublicApiError) {
-      return jsonError(error.message, error.status);
-    }
-
     return jsonError(error instanceof Error ? error.message : "Gagal membuat email");
   }
 }

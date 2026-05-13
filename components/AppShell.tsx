@@ -1,13 +1,14 @@
 import Link from "next/link";
 
-import { Card } from "@/components/ui";
 import { env } from "@/lib/env";
 
 import { LogoutButton } from "./LogoutButton";
 
 const links = [
   { href: "/dashboard", label: "Inbox" },
-  { href: "/dashboard/api-keys", label: "API Keys" }
+  { href: "/dashboard/addresses", label: "Addresses" },
+  { href: "/dashboard/api-keys", label: "API Keys" },
+  { href: "/docs/api", label: "Docs" }
 ];
 
 export function AppShell({
@@ -20,36 +21,37 @@ export function AppShell({
   subtitle?: string;
 }) {
   return (
-    <main className="min-h-screen px-4 py-6 md:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <Card className="overflow-hidden bg-ink p-0 text-white">
-          <div className="flex flex-col gap-6 p-6 md:flex-row md:items-end md:justify-between">
-            <div className="space-y-3">
-              <div className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
-                SiapInbox
-              </div>
-              <div>
-                <h1 className="text-3xl font-semibold">{title}</h1>
-                <p className="mt-2 max-w-2xl text-sm text-white/70">
-                  {subtitle || `Domain aktif: @${env.appDomain}`}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/85 transition hover:bg-white/10"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <LogoutButton />
+    <main className="min-h-screen">
+      <div className="border-b border-line bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 md:px-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-ink text-sm font-bold text-white">SI</div>
+            <div>
+              <div className="text-sm font-semibold text-ink">SiapInbox</div>
+              <div className="text-xs text-muted">@{env.appDomain}</div>
             </div>
           </div>
-        </Card>
+
+          <nav className="flex flex-wrap items-center gap-2">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-ink"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <LogoutButton />
+          </nav>
+        </div>
+      </div>
+
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-5 md:px-6">
+        <header className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold tracking-normal text-ink">{title}</h1>
+          <p className="max-w-3xl text-sm text-muted">{subtitle || `Domain aktif: @${env.appDomain}`}</p>
+        </header>
 
         {children}
       </div>

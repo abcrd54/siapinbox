@@ -7,7 +7,7 @@ export function Card(props: React.HTMLAttributes<HTMLDivElement>) {
     <div
       {...props}
       className={cn(
-        "rounded-3xl border border-black/5 bg-white/85 p-6 shadow-panel backdrop-blur-sm",
+        "rounded-lg border border-line bg-white p-5 shadow-panel",
         props.className
       )}
     />
@@ -22,7 +22,7 @@ export function Button({
     <button
       {...props}
       className={cn(
-        "inline-flex items-center justify-center rounded-2xl bg-ink px-4 py-2 text-sm font-medium text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex h-10 items-center justify-center rounded-md bg-brand px-4 text-sm font-semibold text-white transition hover:bg-teal-800 focus:outline-none focus:shadow-focus disabled:cursor-not-allowed disabled:opacity-60",
         className
       )}
     />
@@ -37,7 +37,7 @@ export function Input({
     <input
       {...props}
       className={cn(
-        "w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-ember",
+        "h-10 w-full rounded-md border border-line bg-white px-3 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-accent focus:shadow-focus",
         className
       )}
     />
@@ -52,7 +52,7 @@ export function Select({
     <select
       {...props}
       className={cn(
-        "w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-ember",
+        "h-10 w-full rounded-md border border-line bg-white px-3 text-sm text-ink outline-none transition focus:border-accent focus:shadow-focus",
         className
       )}
     />
@@ -67,7 +67,7 @@ export function Textarea({
     <textarea
       {...props}
       className={cn(
-        "min-h-28 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition focus:border-ember",
+        "min-h-24 w-full rounded-md border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-accent focus:shadow-focus",
         className
       )}
     />

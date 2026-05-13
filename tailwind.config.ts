@@ -9,14 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0f172a",
-        sand: "#f6f1e8",
-        ember: "#d97706",
-        pine: "#14532d",
-        mist: "#dbe4ea"
+        ink: "#101828",
+        paper: "#f7f9fc",
+        line: "#d9e2ec",
+        brand: "#0f766e",
+        accent: "#2563eb",
+        warn: "#b45309",
+        danger: "#be123c",
+        success: "#047857",
+        muted: "#667085"
       },
       boxShadow: {
-        panel: "0 24px 80px rgba(15, 23, 42, 0.10)"
+        panel: "0 16px 48px rgba(16, 24, 40, 0.08)",
+        focus: "0 0 0 4px rgba(37, 99, 235, 0.12)"
       },
       fontFamily: {
         sans: [

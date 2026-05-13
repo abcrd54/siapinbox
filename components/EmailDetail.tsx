@@ -24,11 +24,11 @@ export function EmailDetail({
   const htmlPreview = sanitizeEmailHtml(email.html_body);
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
+    <div className="grid gap-5 xl:grid-cols-[1.4fr_0.8fr]">
       <Card className="space-y-5">
         <div className="space-y-3">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-2xl font-semibold">{email.subject || "(Tanpa subject)"}</h2>
+            <h2 className="text-xl font-semibold">{email.subject || "(Tanpa subject)"}</h2>
             <StatusBadge value={email.status} />
           </div>
           <div className="grid gap-2 text-sm text-slate-600">
@@ -40,15 +40,15 @@ export function EmailDetail({
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Text Body</h3>
-          <pre className="whitespace-pre-wrap rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
+          <h3 className="text-xs font-semibold uppercase text-muted">Text Body</h3>
+          <pre className="whitespace-pre-wrap rounded-lg border border-line bg-slate-50 p-4 text-sm text-slate-700">
             {email.text_body || "(Kosong)"}
           </pre>
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">HTML Preview</h3>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm text-slate-700">
+          <h3 className="text-xs font-semibold uppercase text-muted">HTML Preview</h3>
+          <div className="rounded-lg border border-line bg-white p-4 text-sm text-slate-700">
             {htmlPreview ? (
               <div dangerouslySetInnerHTML={{ __html: htmlPreview }} />
             ) : (
@@ -60,15 +60,15 @@ export function EmailDetail({
 
       <div className="space-y-6">
         <Card className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Raw Headers</h3>
-          <pre className="overflow-x-auto whitespace-pre-wrap rounded-2xl bg-slate-50 p-4 text-xs text-slate-700">
+          <h3 className="text-xs font-semibold uppercase text-muted">Raw Headers</h3>
+          <pre className="overflow-x-auto whitespace-pre-wrap rounded-lg border border-line bg-slate-50 p-4 text-xs text-slate-700">
             {JSON.stringify(email.raw_headers, null, 2)}
           </pre>
         </Card>
 
         <Card className="space-y-3">
-          <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Attachments</h3>
-          <pre className="overflow-x-auto whitespace-pre-wrap rounded-2xl bg-slate-50 p-4 text-xs text-slate-700">
+          <h3 className="text-xs font-semibold uppercase text-muted">Attachments</h3>
+          <pre className="overflow-x-auto whitespace-pre-wrap rounded-lg border border-line bg-slate-50 p-4 text-xs text-slate-700">
             {JSON.stringify(email.attachments, null, 2)}
           </pre>
         </Card>

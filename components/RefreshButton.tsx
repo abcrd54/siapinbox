@@ -18,7 +18,7 @@ export function RefreshButton() {
       type="button"
       onClick={handleRefresh}
       disabled={refreshing}
-      className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-white/85 transition hover:bg-white/10 disabled:opacity-70"
+      className="inline-flex h-10 items-center gap-2 rounded-md border border-line bg-white px-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-ink disabled:opacity-70"
     >
       <span className={`inline-block text-base ${refreshing ? "animate-spin" : ""}`}>↻</span>
       <span>{refreshing ? "Refreshing..." : "Refresh"}</span>

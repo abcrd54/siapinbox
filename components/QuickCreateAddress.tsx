@@ -49,18 +49,18 @@ export function QuickCreateAddress() {
         value={prefix}
         onChange={(event) => setPrefix(event.target.value)}
         placeholder="prefix"
-        className="h-11 min-w-40 border-white/10 bg-white/8 text-white placeholder:text-white/35 focus:border-white/25"
+        className="min-w-44"
       />
-      <Button type="submit" disabled={pending} className="h-11 rounded-2xl bg-white px-4 text-ink hover:bg-white/90">
+      <Button type="submit" disabled={pending}>
         {pending ? "Membuat..." : "New Address"}
       </Button>
       <Link
         href="/dashboard/api-keys"
-        className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/10 px-4 text-sm text-white/75 transition hover:bg-white/8"
+        className="inline-flex h-10 items-center justify-center rounded-md border border-line px-3 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
       >
         API Keys
       </Link>
-      {feedback ? <div className="text-xs text-white/70">{feedback}</div> : null}
+      {feedback ? <div className="text-xs text-muted">{feedback}</div> : null}
     </form>
   );
 }

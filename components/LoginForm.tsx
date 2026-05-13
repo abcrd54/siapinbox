@@ -37,16 +37,16 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md p-8">
+    <Card className="w-full max-w-md p-7">
       <div className="mb-6 space-y-2">
-        <div className="text-xs font-semibold uppercase tracking-[0.24em] text-ember">SiapInbox</div>
-        <h1 className="text-3xl font-semibold">Dashboard Login</h1>
-        <p className="text-sm text-slate-600">Gunakan password internal untuk mengakses inbox dashboard.</p>
+        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-ink text-sm font-bold text-white">SI</div>
+        <h1 className="text-2xl font-semibold">Dashboard Login</h1>
+        <p className="text-sm text-muted">Gunakan password internal untuk mengakses inbox dashboard.</p>
       </div>
 
       <form className="space-y-4" onSubmit={onSubmit}>
         <div className="space-y-2">
-          <label className="text-sm font-medium">Password</label>
+          <label className="text-sm font-semibold">Password</label>
           <Input
             type="password"
             value={password}

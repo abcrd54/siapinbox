@@ -1,0 +1,13 @@
+
+> siapinbox@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.5.18
+   - Local:        http://localhost:3000
+   - Network:      http://10.1.1.141:3000
+
+ ✓ Starting...
+ ✓ Ready in 4s
+ ○ Compiling /login ...
+ ✓ Compiled /login in 11.4s (616 modules)
+ GET /login 200 in 12350ms
