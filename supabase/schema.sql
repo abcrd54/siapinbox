@@ -97,3 +97,26 @@ on public.api_keys (project);
 
 create index if not exists api_keys_status_idx
 on public.api_keys (status);
+
+create table if not exists public.public_inbox_links (
+  id uuid primary key default gen_random_uuid(),
+  email_address_id uuid not null references public.email_addresses(id) on delete cascade,
+  token text not null unique,
+  label text,
+  latest_only boolean not null default false,
+  status text not null default 'active' check (status in ('active', 'revoked')),
+  expires_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists public_inbox_links_email_address_id_idx
+on public.public_inbox_links (email_address_id);
+
+create index if not exists public_inbox_links_token_idx
+on public.public_inbox_links (token);
+
+create trigger set_public_inbox_links_updated_at
+before update on public.public_inbox_links
+for each row
+execute function public.set_updated_at();

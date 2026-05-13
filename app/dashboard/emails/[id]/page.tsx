@@ -7,7 +7,7 @@ import { EmailActions } from "@/components/EmailActions";
 import { EmailDetail } from "@/components/EmailDetail";
 import { Card } from "@/components/ui";
 import { requireDashboardAuth } from "@/lib/auth";
-import { getMessageById } from "@/lib/data";
+import { getMessageById, markMessageAsRead } from "@/lib/data";
 
 export default async function EmailDetailPage({
   params
@@ -17,7 +17,7 @@ export default async function EmailDetailPage({
   await requireDashboardAuth();
 
   const { id } = await params;
-  const email = await getMessageById(id);
+  const email = (await markMessageAsRead(id)) || (await getMessageById(id));
 
   if (!email) {
     notFound();
@@ -27,7 +27,7 @@ export default async function EmailDetailPage({
     <AppShell title="Email Detail" subtitle="Buka isi email, raw headers, dan update status tanpa keluar dari dashboard.">
       <Card className="space-y-4">
         <h2 className="text-lg font-semibold">Quick Actions</h2>
-        <EmailActions emailId={email.id} currentStatus={email.status} currentLabel={email.label} />
+        <EmailActions emailId={email.id} currentLabel={email.label} />
       </Card>
       <EmailDetail email={email} />
     </AppShell>

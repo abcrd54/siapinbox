@@ -1,5 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import type { ApiKeyRecord, EmailAddressRecord, InboundEmailRecord } from "@/lib/types";
+import type { ApiKeyRecord, EmailAddressRecord, InboundEmailRecord, PublicInboxLinkRecord } from "@/lib/types";
 
 interface LatestMessageSummary {
   id: string;
@@ -159,6 +159,47 @@ export async function getMessageById(id: string) {
   }
 
   return (data as InboundEmailRecord | null) || null;
+}
+
+export async function markMessageAsRead(id: string) {
+  const { data, error } = await supabaseAdmin
+    .from("inbound_emails")
+    .update({ status: "read" })
+    .eq("id", id)
+    .eq("status", "unread")
+    .select("*")
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return (data as InboundEmailRecord | null) || null;
+}
+
+export async function getPublicInboxLinkWithAddress(token: string) {
+  const { data, error } = await supabaseAdmin
+    .from("public_inbox_links")
+    .select("*, email_addresses(*)")
+    .eq("token", token)
+    .eq("status", "active")
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  const typed = (data as (PublicInboxLinkRecord & { email_addresses?: EmailAddressRecord | null }) | null) || null;
+
+  if (!typed) {
+    return null;
+  }
+
+  if (typed.expires_at && new Date(typed.expires_at).getTime() < Date.now()) {
+    return null;
+  }
+
+  return typed;
 }
 
 export async function listApiKeys() {

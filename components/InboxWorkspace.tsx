@@ -147,7 +147,6 @@ export function InboxWorkspace({
               <div className="mt-4">
                 <EmailActions
                   emailId={selectedEmail.id}
-                  currentStatus={selectedEmail.status}
                   currentLabel={selectedEmail.label}
                   compact
                 />

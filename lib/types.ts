@@ -9,6 +9,7 @@ export type EmailMessageStatus =
   | "done";
 
 export type ApiKeyStatus = "active" | "revoked";
+export type PublicInboxLinkStatus = "active" | "revoked";
 
 export type Json =
   | string
@@ -62,4 +63,16 @@ export interface ApiKeyRecord {
   status: ApiKeyStatus;
   last_used_at: string | null;
   created_at: string;
+}
+
+export interface PublicInboxLinkRecord {
+  id: string;
+  email_address_id: string;
+  token: string;
+  label: string | null;
+  latest_only: boolean;
+  status: PublicInboxLinkStatus;
+  expires_at: string | null;
+  created_at: string;
+  updated_at: string;
 }

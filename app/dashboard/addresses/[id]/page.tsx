@@ -5,9 +5,11 @@ import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { EmailAddressHeader } from "@/components/EmailAddressHeader";
 import { EmailMessageList } from "@/components/EmailMessageList";
+import { PublicInboxSection } from "@/components/PublicInboxSection";
 import { requireDashboardAuth } from "@/lib/auth";
 import { getEmailAddressById, getMessagesForAddress } from "@/lib/data";
 import { env } from "@/lib/env";
+import { getPublicInboxLinks } from "@/lib/public-inbox";
 import { truncate } from "@/lib/utils";
 
 export default async function AddressDetailPage({
@@ -28,6 +30,7 @@ export default async function AddressDetailPage({
   }
 
   const messages = await getMessagesForAddress(id, filters);
+  const publicInboxLinks = await getPublicInboxLinks(id);
 
   return (
     <AppShell title="Address Inbox" subtitle="Lihat semua pesan masuk untuk alamat yang dipilih.">
@@ -36,6 +39,7 @@ export default async function AddressDetailPage({
         publicMessagesUrl={`${env.publicAppUrl}/api/public/email-addresses/${encodeURIComponent(address.email)}/messages`}
         publicLatestUrl={`${env.publicAppUrl}/api/public/email-addresses/${encodeURIComponent(address.email)}/latest`}
       />
+      <PublicInboxSection emailAddressId={id} items={publicInboxLinks} />
       <EmailMessageList
         items={messages.map((item) => ({
           id: item.id,
