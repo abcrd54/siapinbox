@@ -3,6 +3,42 @@ import { jsonError, jsonOk, getBearerToken } from "@/lib/http";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { inboundEmailSchema } from "@/lib/validation";
 
+function parseMailboxAddress(value: unknown) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const angleMatch = value.match(/<([^>]+)>/);
+  const candidate = (angleMatch?.[1] || value).trim().toLowerCase();
+
+  if (!candidate.includes("@")) {
+    return null;
+  }
+
+  return candidate;
+}
+
+function extractSenderInfo(payload: Record<string, unknown>) {
+  const rawPayload = payload.raw_payload && typeof payload.raw_payload === "object"
+    ? (payload.raw_payload as Record<string, unknown>)
+    : null;
+  const parsedFrom = rawPayload?.parsed_from && typeof rawPayload.parsed_from === "object"
+    ? (rawPayload.parsed_from as Record<string, unknown>)
+    : null;
+  const rawHeaders = payload.raw_headers && typeof payload.raw_headers === "object"
+    ? (payload.raw_headers as Record<string, unknown>)
+    : null;
+
+  const headerFrom = parseMailboxAddress(rawHeaders?.from);
+  const parsedFromAddress = parseMailboxAddress(parsedFrom?.address);
+  const parsedFromName = typeof parsedFrom?.name === "string" ? parsedFrom.name.trim() : null;
+
+  return {
+    fromEmail: parsedFromAddress || headerFrom || payload.from_email,
+    fromName: parsedFromName || payload.from_name
+  };
+}
+
 export async function POST(request: Request) {
   const bearerToken = getBearerToken(request.headers.get("authorization"));
 
@@ -24,6 +60,10 @@ export async function POST(request: Request) {
 
     return jsonError(parsed.error.issues[0]?.message || "Payload tidak valid");
   }
+
+  const senderInfo = extractSenderInfo(parsed.data as Record<string, unknown>);
+  const normalizedFromEmail = typeof senderInfo.fromEmail === "string" ? senderInfo.fromEmail : parsed.data.from_email;
+  const normalizedFromName = typeof senderInfo.fromName === "string" ? senderInfo.fromName : parsed.data.from_name;
 
   const { data: emailAddress, error: lookupError } = await supabaseAdmin
     .from("email_addresses")
@@ -64,8 +104,8 @@ export async function POST(request: Request) {
     .insert({
       email_address_id: emailAddress.id,
       message_id: parsed.data.message_id || null,
-      from_email: parsed.data.from_email,
-      from_name: parsed.data.from_name || null,
+      from_email: normalizedFromEmail,
+      from_name: normalizedFromName || null,
       to_email: parsed.data.to_email.toLowerCase(),
       subject: parsed.data.subject || null,
       text_body: parsed.data.text_body || null,

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const optionalTrimmed = z.string().trim().min(1).max(120).optional().or(z.literal(""));
+const nullableOptionalString = z.string().optional().nullable().or(z.literal(""));
 
 export const createRandomEmailSchema = z.object({
   prefix: z.string().trim().min(1).max(40).optional().default("inbox"),
@@ -22,13 +23,13 @@ export const emailMessageUpdateSchema = z.object({
 });
 
 export const inboundEmailSchema = z.object({
-  message_id: z.string().trim().max(255).optional().or(z.literal("")),
+  message_id: nullableOptionalString,
   from_email: z.string().email(),
-  from_name: z.string().trim().max(255).optional().or(z.literal("")),
+  from_name: nullableOptionalString,
   to_email: z.string().email(),
-  subject: z.string().trim().max(500).optional().or(z.literal("")),
-  text_body: z.string().optional().or(z.literal("")),
-  html_body: z.string().optional().or(z.literal("")),
+  subject: nullableOptionalString,
+  text_body: nullableOptionalString,
+  html_body: nullableOptionalString,
   raw_headers: z.record(z.unknown()).optional(),
   raw_payload: z.record(z.unknown()).optional(),
   attachments: z.array(z.unknown()).optional()
