@@ -3,6 +3,15 @@ import { jsonError, jsonOk, getBearerToken } from "@/lib/http";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { inboundEmailSchema } from "@/lib/validation";
 
+function normalizeOptionalString(value: unknown) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
+}
+
 function parseMailboxAddress(value: unknown) {
   if (typeof value !== "string") {
     return null;
@@ -18,20 +27,90 @@ function parseMailboxAddress(value: unknown) {
   return candidate;
 }
 
+function toObject(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+
+  return value as Record<string, unknown>;
+}
+
+function extractAddressFromParsedTo(parsedTo: unknown) {
+  if (!Array.isArray(parsedTo) || !parsedTo.length) {
+    return null;
+  }
+
+  const first = toObject(parsedTo[0]);
+  return parseMailboxAddress(first?.address);
+}
+
+function normalizeInboundPayload(body: Record<string, unknown> | null) {
+  const rawPayload = toObject(body?.raw_payload);
+  const rawHeaders = toObject(body?.raw_headers) || toObject(rawPayload?.headers);
+  const parsedFrom = toObject(rawPayload?.parsed_from);
+
+  const fromEmail =
+    parseMailboxAddress(body?.from_email) ||
+    parseMailboxAddress(parsedFrom?.address) ||
+    parseMailboxAddress(rawHeaders?.from);
+
+  const fromName =
+    normalizeOptionalString(body?.from_name) ||
+    normalizeOptionalString(parsedFrom?.name);
+
+  const toEmail =
+    parseMailboxAddress(body?.to_email) ||
+    extractAddressFromParsedTo(rawPayload?.parsed_to) ||
+    parseMailboxAddress(rawHeaders?.to);
+
+  const subject =
+    normalizeOptionalString(body?.subject) ||
+    normalizeOptionalString(rawHeaders?.subject);
+
+  const messageId =
+    normalizeOptionalString(body?.message_id) ||
+    normalizeOptionalString(rawHeaders?.["message-id"]);
+
+  const textBody =
+    normalizeOptionalString(body?.text_body) ||
+    normalizeOptionalString(rawPayload?.text) ||
+    normalizeOptionalString(rawPayload?.text_body) ||
+    null;
+
+  const htmlBody =
+    normalizeOptionalString(body?.html_body) ||
+    normalizeOptionalString(rawPayload?.html) ||
+    normalizeOptionalString(rawPayload?.html_body) ||
+    null;
+
+  const rawEnvelope =
+    normalizeOptionalString(rawPayload?.raw) ||
+    normalizeOptionalString(body?.raw);
+
+  const normalizedTextBody = textBody || (!htmlBody ? rawEnvelope : null);
+
+  return {
+    message_id: messageId,
+    from_email: fromEmail,
+    from_name: fromName,
+    to_email: toEmail,
+    subject,
+    text_body: normalizedTextBody,
+    html_body: htmlBody,
+    raw_headers: rawHeaders || null,
+    raw_payload: rawPayload || body || null,
+    attachments: Array.isArray(body?.attachments) ? body?.attachments : []
+  };
+}
+
 function extractSenderInfo(payload: Record<string, unknown>) {
-  const rawPayload = payload.raw_payload && typeof payload.raw_payload === "object"
-    ? (payload.raw_payload as Record<string, unknown>)
-    : null;
-  const parsedFrom = rawPayload?.parsed_from && typeof rawPayload.parsed_from === "object"
-    ? (rawPayload.parsed_from as Record<string, unknown>)
-    : null;
-  const rawHeaders = payload.raw_headers && typeof payload.raw_headers === "object"
-    ? (payload.raw_headers as Record<string, unknown>)
-    : null;
+  const rawPayload = toObject(payload.raw_payload);
+  const parsedFrom = toObject(rawPayload?.parsed_from);
+  const rawHeaders = toObject(payload.raw_headers);
 
   const headerFrom = parseMailboxAddress(rawHeaders?.from);
   const parsedFromAddress = parseMailboxAddress(parsedFrom?.address);
-  const parsedFromName = typeof parsedFrom?.name === "string" ? parsedFrom.name.trim() : null;
+  const parsedFromName = normalizeOptionalString(parsedFrom?.name);
 
   return {
     fromEmail: parsedFromAddress || headerFrom || payload.from_email,
@@ -47,13 +126,14 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => null);
-  const parsed = inboundEmailSchema.safeParse(body);
+  const normalizedPayload = normalizeInboundPayload(toObject(body));
+  const parsed = inboundEmailSchema.safeParse(normalizedPayload);
 
   if (!parsed.success) {
     await supabaseAdmin.from("rejected_emails").insert({
-      to_email: body?.to_email || null,
-      from_email: body?.from_email || null,
-      subject: body?.subject || null,
+      to_email: normalizedPayload.to_email || parseMailboxAddress(toObject(body)?.to_email) || null,
+      from_email: normalizedPayload.from_email || parseMailboxAddress(toObject(body)?.from_email) || null,
+      subject: normalizedPayload.subject || normalizeOptionalString(toObject(body)?.subject) || null,
       reason: "invalid_payload",
       raw_payload: body || {}
     });

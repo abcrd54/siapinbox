@@ -34,9 +34,9 @@ export const inboundEmailSchema = z.object({
   subject: nullableOptionalString,
   text_body: nullableOptionalString,
   html_body: nullableOptionalString,
-  raw_headers: z.record(z.unknown()).optional(),
-  raw_payload: z.record(z.unknown()).optional(),
-  attachments: z.array(z.unknown()).optional()
+  raw_headers: z.record(z.unknown()).optional().nullable(),
+  raw_payload: z.record(z.unknown()).optional().nullable(),
+  attachments: z.array(z.unknown()).optional().nullable()
 });
 
 export const createApiKeySchema = z.object({
