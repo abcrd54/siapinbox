@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 
 import { Card } from "@/components/ui";
 import { env } from "@/lib/env";
@@ -21,9 +22,18 @@ const sections = [
   }
 ];
 
-const publicBaseUrl = `${env.publicAppUrl}/api/public`;
+async function getRequestOrigin() {
+  const headerStore = await headers();
+  const host = headerStore.get("x-forwarded-host") || headerStore.get("host");
+  const proto = headerStore.get("x-forwarded-proto") || "https";
 
-export default function ApiDocsPage() {
+  return host ? `${proto}://${host}` : env.publicAppUrl;
+}
+
+export default async function ApiDocsPage() {
+  const appUrl = await getRequestOrigin();
+  const publicBaseUrl = `${appUrl}/api/public`;
+
   return (
     <main className="min-h-screen px-4 py-6 md:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
@@ -54,8 +64,8 @@ export default function ApiDocsPage() {
             <div>
               <h2 className="text-xl font-semibold">Base URLs</h2>
               <div className="mt-3 space-y-2 text-sm text-slate-600">
-                <div>Dashboard/App: <span className="font-medium text-ink">{env.publicAppUrl}</span></div>
-                <div>Inbound API: <span className="font-medium text-ink">{env.publicAppUrl}/api/inbound-email</span></div>
+                <div>Dashboard/App: <span className="font-medium text-ink">{appUrl}</span></div>
+                <div>Inbound API: <span className="font-medium text-ink">{appUrl}/api/inbound-email</span></div>
                 <div>Public API: <span className="font-medium text-ink">{publicBaseUrl}</span></div>
               </div>
             </div>
@@ -74,7 +84,7 @@ export default function ApiDocsPage() {
             <section className="space-y-3">
               <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Cloudflare Worker Env</h3>
               <pre className="overflow-x-auto rounded-2xl bg-slate-50 p-4 text-xs text-slate-700">
-{`INBOUND_API_URL=${env.publicAppUrl}/api/inbound-email
+{`INBOUND_API_URL=${appUrl}/api/inbound-email
 INBOUND_EMAIL_SECRET=<same value as Next.js>
 VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
               </pre>
@@ -113,7 +123,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                 </pre>
               </div>
               <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-4 text-xs text-slate-100">
-{`curl -X POST "${env.publicAppUrl}/api/inbound-email" \\
+{`curl -X POST "${appUrl}/api/inbound-email" \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer INBOUND_EMAIL_SECRET" \\
   -d '{
