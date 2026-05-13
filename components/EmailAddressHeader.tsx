@@ -19,7 +19,7 @@ export function EmailAddressHeader({
   publicLatestUrl: string;
 }) {
   return (
-    <Card className="grid gap-5 xl:grid-cols-[1fr_0.9fr]">
+    <Card className="grid gap-5 rounded-xl xl:grid-cols-[1.2fr_0.8fr]">
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
           <h2 className="text-xl font-semibold">{address.email}</h2>
@@ -33,7 +33,7 @@ export function EmailAddressHeader({
         </div>
       </div>
 
-      <div className="space-y-3 rounded-lg border border-line bg-slate-50 p-4">
+      <div className="space-y-3 rounded-xl border border-line bg-slate-50 p-4">
         <div>
           <div className="text-xs font-semibold uppercase text-muted">Public API</div>
           <div className="mt-2 text-sm text-slate-600">Gunakan endpoint ini untuk integrasi platform lain.</div>

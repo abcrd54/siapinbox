@@ -24,9 +24,9 @@ export default async function PublicInboxPage({
   });
 
   return (
-    <main className="min-h-screen px-4 py-6 md:px-8">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6">
-        <Card className="overflow-hidden bg-ink p-0 text-white">
+    <main className="min-h-screen px-4 py-6 md:px-8 xl:px-10">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-6">
+        <Card className="overflow-hidden rounded-xl bg-ink p-0 text-white">
           <div className="p-6">
             <div className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-white/80">
               Shared Inbox
@@ -41,36 +41,40 @@ export default async function PublicInboxPage({
         <div className="grid gap-4">
           {messages.length ? (
             messages.map((message) => (
-              <Card key={message.id} className="space-y-4">
-                <div className="space-y-2">
-                  <h2 className="text-xl font-semibold">{message.subject || "(Tanpa subject)"}</h2>
-                  <div className="text-sm text-slate-600">
-                    Dari {message.from_name ? `${message.from_name} <${message.from_email}>` : message.from_email}
+              <Card key={message.id} className="overflow-hidden rounded-xl p-0">
+                <div className="border-b border-line bg-gradient-to-r from-slate-50 to-white px-5 py-5">
+                  <div className="space-y-2">
+                    <h2 className="text-xl font-semibold">{message.subject || "(Tanpa subject)"}</h2>
+                    <div className="text-sm text-slate-600">
+                      Dari {message.from_name ? `${message.from_name} <${message.from_email}>` : message.from_email}
+                    </div>
+                    <div className="text-sm text-slate-500">{formatDate(message.received_at)}</div>
                   </div>
-                  <div className="text-sm text-slate-500">{formatDate(message.received_at)}</div>
                 </div>
 
-                <section>
-                  <div className="mb-2 text-xs font-semibold uppercase text-muted">Text</div>
-                  <pre className="whitespace-pre-wrap rounded-md bg-slate-50 p-4 text-sm text-slate-700">
-                    {message.text_body || "(Kosong)"}
-                  </pre>
-                </section>
+                <div className="grid gap-4 p-4 xl:grid-cols-[360px_minmax(0,1fr)]">
+                  <section className="rounded-xl border border-line bg-slate-50 p-4">
+                    <div className="mb-3 text-xs font-semibold uppercase text-muted">Text</div>
+                    <pre className="max-h-[320px] overflow-y-auto whitespace-pre-wrap text-sm leading-6 text-slate-700">
+                      {message.text_body || "(Kosong)"}
+                    </pre>
+                  </section>
 
-                <section>
-                  <div className="mb-2 text-xs font-semibold uppercase text-muted">HTML Preview</div>
-                  <div className="rounded-md border border-line bg-white p-4 text-sm text-slate-700">
-                    {message.html_body ? (
-                      <div dangerouslySetInnerHTML={{ __html: sanitizeEmailHtml(message.html_body) }} />
-                    ) : (
-                      <div className="text-slate-500">(Tidak ada HTML body)</div>
-                    )}
-                  </div>
-                </section>
+                  <section className="min-w-0 overflow-hidden rounded-xl border border-line bg-slate-50">
+                    <div className="border-b border-line px-4 py-3 text-xs font-semibold uppercase text-muted">HTML Preview</div>
+                    <div className="min-h-[420px] overflow-y-auto p-4">
+                      {message.html_body ? (
+                        <div className="rounded-lg border border-line bg-white p-5 text-sm text-slate-700 shadow-sm" dangerouslySetInnerHTML={{ __html: sanitizeEmailHtml(message.html_body) }} />
+                      ) : (
+                        <div className="rounded-lg border border-dashed border-line bg-white p-6 text-slate-500">(Tidak ada HTML body)</div>
+                      )}
+                    </div>
+                  </section>
+                </div>
               </Card>
             ))
           ) : (
-            <Card className="text-center text-sm text-muted">Belum ada email di inbox ini.</Card>
+            <Card className="rounded-xl text-center text-sm text-muted">Belum ada email di inbox ini.</Card>
           )}
         </div>
       </div>

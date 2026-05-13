@@ -14,16 +14,20 @@ const links = [
 export function AppShell({
   children,
   title,
-  subtitle
+  subtitle,
+  wide = false
 }: {
   children: React.ReactNode;
   title: string;
   subtitle?: string;
+  wide?: boolean;
 }) {
+  const shellWidth = wide ? "max-w-[1800px]" : "max-w-7xl";
+
   return (
     <main className="min-h-screen">
       <div className="border-b border-line bg-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 md:px-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className={`mx-auto flex ${shellWidth} flex-col gap-4 px-4 py-4 md:px-6 xl:px-8 2xl:px-10 lg:flex-row lg:items-center lg:justify-between`}>
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-md bg-ink text-sm font-bold text-white">SI</div>
             <div>
@@ -47,7 +51,7 @@ export function AppShell({
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 py-5 md:px-6">
+      <div className={`mx-auto flex ${shellWidth} flex-col gap-5 px-4 py-5 md:px-6 xl:px-8 2xl:px-10`}>
         <header className="flex flex-col gap-1">
           <h1 className="text-2xl font-semibold tracking-normal text-ink">{title}</h1>
           <p className="max-w-3xl text-sm text-muted">{subtitle || `Domain aktif: @${env.appDomain}`}</p>

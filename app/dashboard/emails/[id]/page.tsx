@@ -24,8 +24,8 @@ export default async function EmailDetailPage({
   }
 
   return (
-    <AppShell title="Email Detail" subtitle="Buka isi email, raw headers, dan update status tanpa keluar dari dashboard.">
-      <Card className="space-y-4">
+    <AppShell title="Email Detail" subtitle="Buka isi email, raw headers, dan update status tanpa keluar dari dashboard." wide>
+      <Card className="space-y-4 rounded-xl">
         <h2 className="text-lg font-semibold">Quick Actions</h2>
         <EmailActions emailId={email.id} currentLabel={email.label} />
       </Card>

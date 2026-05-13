@@ -10,7 +10,7 @@ export default async function ApiKeysPage() {
   const keys = await listApiKeys();
 
   return (
-    <AppShell title="API Keys" subtitle="Kelola akses platform lain ke inbox publik dan generator address.">
+    <AppShell title="API Keys" subtitle="Kelola akses platform lain ke inbox publik dan generator address." wide>
       <ApiKeyManager items={keys} />
     </AppShell>
   );

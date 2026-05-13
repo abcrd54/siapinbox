@@ -33,7 +33,7 @@ export default async function AddressDetailPage({
   const publicInboxLinks = await getPublicInboxLinks(id);
 
   return (
-    <AppShell title="Address Inbox" subtitle="Lihat semua pesan masuk untuk alamat yang dipilih.">
+    <AppShell title="Address Inbox" subtitle="Lihat semua pesan masuk untuk alamat yang dipilih." wide>
       <EmailAddressHeader
         address={address}
         publicMessagesUrl={`${env.publicAppUrl}/api/public/email-addresses/${encodeURIComponent(address.email)}/messages`}

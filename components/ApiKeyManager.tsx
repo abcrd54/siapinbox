@@ -74,11 +74,11 @@ export function ApiKeyManager({ items }: { items: ApiKeyItem[] }) {
   }
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[0.85fr_1.15fr]">
-      <Card>
+    <div className="grid gap-5 2xl:grid-cols-[380px_minmax(0,1fr)]">
+      <Card className="rounded-xl border border-line bg-gradient-to-br from-ink to-slate-800 p-6 text-white">
         <div className="mb-6">
           <h2 className="text-lg font-semibold">Create API Key</h2>
-          <p className="mt-1 text-sm text-muted">Key hanya ditampilkan sekali setelah dibuat. Simpan di platform yang membutuhkannya.</p>
+          <p className="mt-1 text-sm text-white/70">Key hanya ditampilkan sekali setelah dibuat. Simpan di platform yang membutuhkannya.</p>
         </div>
 
         <form className="space-y-4" onSubmit={createKey}>
@@ -99,20 +99,41 @@ export function ApiKeyManager({ items }: { items: ApiKeyItem[] }) {
             />
           </div>
 
-          {error ? <p className="text-sm text-rose-600">{error}</p> : null}
-          {newKey ? <p className="rounded-md border border-emerald-200 bg-emerald-50 p-3 break-all text-sm text-emerald-700">API key baru: {newKey}</p> : null}
+          {error ? <p className="text-sm text-rose-300">{error}</p> : null}
+          {newKey ? <p className="break-all rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-4 text-sm text-emerald-100">API key baru: {newKey}</p> : null}
 
           <Button type="submit" disabled={pending}>
             {pending ? "Membuat..." : "Create key"}
           </Button>
         </form>
+
+        <div className="mt-6 grid gap-3 text-sm text-white/80">
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Permissions</div>
+            <div className="mt-2">Pisahkan permission dengan koma, misalnya `emails:read,addresses:create`.</div>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Security</div>
+            <div className="mt-2">Gunakan key berbeda per platform agar revoke tidak mengganggu integrasi lain.</div>
+          </div>
+        </div>
       </Card>
 
-      <Card className="overflow-hidden p-0">
-        <div className="overflow-x-auto">
+      <Card className="overflow-hidden rounded-xl p-0">
+        <div className="border-b border-line bg-gradient-to-r from-slate-50 to-white px-6 py-5">
+          <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold">Issued Keys</h2>
+              <p className="mt-1 text-sm text-muted">Pantau permission, status, dan aktivitas key dari satu tempat.</p>
+            </div>
+            <div className="text-sm text-slate-500">{items.length} key</div>
+          </div>
+        </div>
+
+        <div className="hidden overflow-x-auto xl:block">
           <table className="min-w-full text-sm">
-          <thead className="border-b border-line bg-slate-50 text-left text-xs uppercase text-muted">
-            <tr>
+            <thead className="border-b border-line bg-slate-50 text-left text-xs uppercase text-muted">
+              <tr>
                 <th className="px-4 py-3 font-semibold">Name</th>
                 <th className="px-4 py-3 font-semibold">Project</th>
                 <th className="px-4 py-3 font-semibold">Permissions</th>
@@ -123,7 +144,7 @@ export function ApiKeyManager({ items }: { items: ApiKeyItem[] }) {
             </thead>
             <tbody>
               {items.map((item) => (
-                <tr key={item.id} className="border-b border-line transition hover:bg-slate-50">
+                <tr key={item.id} className="border-b border-line transition hover:bg-slate-50/80">
                   <td className="px-4 py-3 font-semibold">{item.name}</td>
                   <td className="px-4 py-3 text-slate-600">{item.project || "-"}</td>
                   <td className="px-4 py-3 text-slate-600">{item.permissions.join(", ")}</td>
@@ -145,6 +166,41 @@ export function ApiKeyManager({ items }: { items: ApiKeyItem[] }) {
             </tbody>
           </table>
         </div>
+
+        <div className="grid gap-4 p-4 xl:hidden">
+          {items.map((item) => (
+            <div key={item.id} className="rounded-xl border border-line bg-slate-50 p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <div className="text-base font-semibold text-ink">{item.name}</div>
+                  <div className="mt-1 text-sm text-slate-600">{item.project || "Tanpa project"}</div>
+                </div>
+                <StatusBadge value={item.status} />
+              </div>
+              <div className="mt-4 grid gap-3 text-sm text-slate-600">
+                <div>
+                  <div className="text-xs uppercase text-muted">Permissions</div>
+                  <div className="mt-1 break-words">{item.permissions.join(", ") || "-"}</div>
+                </div>
+                <div>
+                  <div className="text-xs uppercase text-muted">Last used</div>
+                  <div className="mt-1">{formatDate(item.last_used_at)}</div>
+                </div>
+              </div>
+              <div className="mt-4">
+                {item.status === "active" ? (
+                  <button type="button" className="font-semibold text-danger hover:text-rose-800" onClick={() => revokeKey(item.id)}>
+                    Revoke
+                  </button>
+                ) : (
+                  <span className="text-slate-400">Revoked</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {!items.length ? <div className="px-6 py-10 text-center text-sm text-muted">Belum ada API key.</div> : null}
       </Card>
     </div>
   );

@@ -34,10 +34,21 @@ on public.email_addresses (status);
 create index if not exists email_addresses_project_idx
 on public.email_addresses (project);
 
-create trigger set_email_addresses_updated_at
-before update on public.email_addresses
-for each row
-execute function public.set_updated_at();
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_trigger
+    where tgname = 'set_email_addresses_updated_at'
+      and tgrelid = 'public.email_addresses'::regclass
+  ) then
+    create trigger set_email_addresses_updated_at
+    before update on public.email_addresses
+    for each row
+    execute function public.set_updated_at();
+  end if;
+end
+$$;
 
 create table if not exists public.inbound_emails (
   id uuid primary key default gen_random_uuid(),
@@ -116,7 +127,18 @@ on public.public_inbox_links (email_address_id);
 create index if not exists public_inbox_links_token_idx
 on public.public_inbox_links (token);
 
-create trigger set_public_inbox_links_updated_at
-before update on public.public_inbox_links
-for each row
-execute function public.set_updated_at();
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_trigger
+    where tgname = 'set_public_inbox_links_updated_at'
+      and tgrelid = 'public.public_inbox_links'::regclass
+  ) then
+    create trigger set_public_inbox_links_updated_at
+    before update on public.public_inbox_links
+    for each row
+    execute function public.set_updated_at();
+  end if;
+end
+$$;

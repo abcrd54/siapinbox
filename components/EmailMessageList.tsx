@@ -16,7 +16,7 @@ interface EmailMessageListItem {
 
 export function EmailMessageList({ items }: { items: EmailMessageListItem[] }) {
   return (
-    <Card className="overflow-hidden p-0">
+    <Card className="overflow-hidden rounded-xl p-0">
       <div className="divide-y divide-line">
         {items.length ? (
           items.map((item) => (

@@ -16,7 +16,7 @@ export default async function AddressesPage({
   const addresses = await getEmailAddresses(filters);
 
   return (
-    <AppShell title="Email Addresses" subtitle="Buat alamat random/custom lalu pantau inbox masing-masing address.">
+    <AppShell title="Email Addresses" subtitle="Buat alamat random/custom lalu pantau inbox masing-masing address." wide>
       <CreateEmailForms />
       <EmailAddressList items={addresses} />
     </AppShell>

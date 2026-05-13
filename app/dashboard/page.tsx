@@ -28,8 +28,12 @@ export default async function DashboardPage({
     : null;
 
   return (
-    <AppShell title="Inbox Workspace" subtitle="Kelola address, pesan masuk, status, dan metadata dalam satu layar kerja.">
-      <div className="flex flex-col gap-3 rounded-lg border border-line bg-white p-3 shadow-panel lg:flex-row lg:items-center lg:justify-between">
+    <AppShell
+      title="Inbox Workspace"
+      subtitle="Kelola address, pesan masuk, status, dan metadata dalam satu layar kerja."
+      wide
+    >
+      <div className="flex flex-col gap-3 rounded-xl border border-line bg-white/95 p-3 shadow-panel lg:flex-row lg:items-center lg:justify-between">
         <QuickCreateAddress />
         <div className="flex flex-wrap items-center gap-2">
           <Link href="/docs/api" className="rounded-md border border-line px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100">

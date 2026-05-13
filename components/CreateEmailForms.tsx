@@ -67,38 +67,55 @@ export function CreateEmailForms() {
   }
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[0.75fr_1.25fr]">
-      <Card className="space-y-4">
+    <div className="grid gap-5 2xl:grid-cols-[360px_minmax(0,1fr)]">
+      <Card className="space-y-5 rounded-xl border border-line bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white">
         <div>
           <h2 className="text-lg font-semibold">Create Address</h2>
-          <p className="mt-1 text-sm text-muted">Buat alamat random untuk testing cepat atau custom untuk alamat tetap.</p>
+          <p className="mt-1 text-sm text-white/70">Buat alamat random untuk testing cepat atau custom untuk alamat tetap.</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 p-1">
+        <div className="grid grid-cols-2 gap-2 rounded-xl bg-white/10 p-1">
           <button
             type="button"
             onClick={() => setMode("random")}
-            className={`rounded-md px-3 py-2 text-sm font-semibold transition ${mode === "random" ? "bg-white text-ink shadow-sm" : "text-slate-600 hover:text-ink"}`}
+            className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${mode === "random" ? "bg-white text-ink shadow-sm" : "text-white/70 hover:text-white"}`}
           >
             Random
           </button>
           <button
             type="button"
             onClick={() => setMode("custom")}
-            className={`rounded-md px-3 py-2 text-sm font-semibold transition ${mode === "custom" ? "bg-white text-ink shadow-sm" : "text-slate-600 hover:text-ink"}`}
+            className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${mode === "custom" ? "bg-white text-ink shadow-sm" : "text-white/70 hover:text-white"}`}
           >
             Custom
           </button>
         </div>
 
-        <div className="rounded-md border border-line bg-slate-50 p-3 text-sm text-slate-600">
+        <div className="rounded-xl border border-white/10 bg-white/10 p-4 text-sm text-white/80">
           {mode === "random"
             ? "Format random: {prefix}-{random}@domain. Cocok untuk OTP, lead, dan test automation."
             : "Format custom: local_part@domain. Cocok untuk inbox tetap seperti support, demo, atau client-specific."}
         </div>
+
+        <div className="grid gap-3 text-sm text-white/80">
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Quick Use</div>
+            <div className="mt-2">Pakai `random` untuk flow OTP dan test automation yang butuh alamat baru setiap run.</div>
+          </div>
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Persistent Use</div>
+            <div className="mt-2">Pakai `custom` untuk inbox tetap seperti `support`, `sales`, atau alamat client-specific.</div>
+          </div>
+        </div>
       </Card>
 
-      <Card>
+      <Card className="rounded-xl p-0 overflow-hidden">
+        <div className="border-b border-line bg-gradient-to-r from-slate-50 to-white px-6 py-5">
+          <h3 className="text-lg font-semibold">{mode === "random" ? "Generate Random Address" : "Create Custom Address"}</h3>
+          <p className="mt-1 text-sm text-muted">Isi metadata seperlunya agar inbox lebih mudah dicari dan dikelola.</p>
+        </div>
+
+        <div className="p-6">
         <form className="space-y-4" onSubmit={submit}>
           {mode === "random" ? (
             <div className="space-y-2">
@@ -150,12 +167,13 @@ export function CreateEmailForms() {
           </div>
 
           {error ? <p className="text-sm text-rose-600">{error}</p> : null}
-          {message ? <p className="text-sm text-emerald-700">Berhasil: {message}</p> : null}
+          {message ? <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Berhasil: {message}</p> : null}
 
           <Button type="submit" disabled={pending}>
             {pending ? "Menyimpan..." : "Create email"}
           </Button>
         </form>
+        </div>
       </Card>
     </div>
   );
