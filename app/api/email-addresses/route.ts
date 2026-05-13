@@ -61,6 +61,20 @@ export async function POST(request: Request) {
     ensureValidLocalPart(localPart);
     const email = buildEmailAddress(localPart);
 
+    const { data: existing, error: existingError } = await supabaseAdmin
+      .from("email_addresses")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existingError) {
+      return jsonError(existingError.message, 500);
+    }
+
+    if (existing) {
+      return jsonError("Email address already exists", 409);
+    }
+
     const { data, error } = await supabaseAdmin
       .from("email_addresses")
       .insert({

@@ -1,5 +1,6 @@
 import { requireDashboardApiAuth } from "@/lib/auth";
 import { jsonError, jsonOk } from "@/lib/http";
+import { parseLimit } from "@/lib/public-api";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { truncate } from "@/lib/utils";
 
@@ -17,7 +18,7 @@ export async function GET(
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
   const search = searchParams.get("search");
-  const limit = Number(searchParams.get("limit") || "20");
+  const limit = parseLimit(searchParams.get("limit"));
 
   let query = supabaseAdmin
     .from("inbound_emails")

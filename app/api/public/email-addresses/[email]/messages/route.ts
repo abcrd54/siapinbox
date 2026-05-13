@@ -1,5 +1,6 @@
 import { authenticateApiKey } from "@/lib/api-key";
 import { getBearerToken, jsonError, jsonOk } from "@/lib/http";
+import { getReadableAddressForApiKey, parseLimit } from "@/lib/public-api";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export async function GET(
@@ -16,24 +17,11 @@ export async function GET(
   const { email } = await params;
   const decodedEmail = decodeURIComponent(email).toLowerCase();
   const { searchParams } = new URL(request.url);
-  const limit = Number(searchParams.get("limit") || "20");
+  const limit = parseLimit(searchParams.get("limit"));
 
-  const { data: address, error: addressError } = await supabaseAdmin
-    .from("email_addresses")
-    .select("id, project")
-    .eq("email", decodedEmail)
-    .maybeSingle();
-
-  if (addressError) {
-    return jsonError(addressError.message, 500);
-  }
-
-  if (!address) {
-    return jsonError("Email address not found", 404);
-  }
-
-  if (apiKey.project && address.project && apiKey.project !== address.project) {
-    return jsonError("Forbidden", 403);
+  const { address, response } = await getReadableAddressForApiKey(decodedEmail, apiKey);
+  if (response) {
+    return response;
   }
 
   const { data, error } = await supabaseAdmin

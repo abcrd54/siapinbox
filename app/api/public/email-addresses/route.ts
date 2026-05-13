@@ -1,6 +1,7 @@
 import { authenticateApiKey } from "@/lib/api-key";
 import { buildEmailAddress, ensureValidLocalPart, sanitizeLocalPartInput } from "@/lib/email-generator";
 import { getBearerToken, jsonError, jsonOk } from "@/lib/http";
+import { PublicApiError, resolveApiKeyProject } from "@/lib/public-api";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { createCustomEmailSchema } from "@/lib/validation";
 
@@ -20,6 +21,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    const project = resolveApiKeyProject(apiKey, parsed.data.project);
     const localPart = sanitizeLocalPartInput(parsed.data.local_part);
     ensureValidLocalPart(localPart);
     const email = buildEmailAddress(localPart);
@@ -45,7 +47,7 @@ export async function POST(request: Request) {
         local_part: localPart,
         domain: process.env.APP_DOMAIN || "siapdigital.web.id",
         label: parsed.data.label,
-        project: parsed.data.project || apiKey.project,
+        project,
         purpose: parsed.data.purpose,
         created_by: `api_key:${apiKey.id}`
       })
@@ -58,6 +60,10 @@ export async function POST(request: Request) {
 
     return jsonOk({ email_address: data }, { status: 201 });
   } catch (error) {
+    if (error instanceof PublicApiError) {
+      return jsonError(error.message, error.status);
+    }
+
     return jsonError(error instanceof Error ? error.message : "Gagal membuat email");
   }
 }
