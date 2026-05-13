@@ -2,6 +2,10 @@ import { z } from "zod";
 
 const optionalTrimmed = z.string().trim().min(1).max(120).optional().or(z.literal(""));
 const nullableOptionalString = z.string().optional().nullable().or(z.literal(""));
+const looseEmailString = z.string().trim().min(3).max(320).refine(
+  (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+  "Invalid email"
+);
 
 export const createRandomEmailSchema = z.object({
   prefix: z.string().trim().min(1).max(40).optional().default("inbox"),
@@ -24,9 +28,9 @@ export const emailMessageUpdateSchema = z.object({
 
 export const inboundEmailSchema = z.object({
   message_id: nullableOptionalString,
-  from_email: z.string().email(),
+  from_email: looseEmailString,
   from_name: nullableOptionalString,
-  to_email: z.string().email(),
+  to_email: looseEmailString,
   subject: nullableOptionalString,
   text_body: nullableOptionalString,
   html_body: nullableOptionalString,
