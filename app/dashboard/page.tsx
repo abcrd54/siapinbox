@@ -8,7 +8,7 @@ import { QuickCreateAddress } from "@/components/QuickCreateAddress";
 import { InboxWorkspace } from "@/components/InboxWorkspace";
 import { RefreshButton } from "@/components/RefreshButton";
 import { requireDashboardAuth } from "@/lib/auth";
-import { getEmailAddresses, getMessageById, getMessagesForAddress, markMessageAsRead } from "@/lib/data";
+import { getEmailAddressesBasic, getMessageById, getMessagesForAddress, markMessageAsRead } from "@/lib/data";
 
 export default async function DashboardPage({
   searchParams
@@ -17,14 +17,14 @@ export default async function DashboardPage({
 }) {
   await requireDashboardAuth();
   const params = (await searchParams) || {};
-  const addresses = await getEmailAddresses();
+  const addresses = await getEmailAddressesBasic();
   const selectedAddress = addresses.find((item) => item.id === params.address) || addresses[0] || null;
   const messages = selectedAddress ? await getMessagesForAddress(selectedAddress.id, { limit: 100 }) : [];
   const selectedMessage = messages.find((item) => item.id === params.email) || messages[0] || null;
   const selectedEmail = selectedMessage
-    ? ((selectedMessage.status === "unread"
-        ? await markMessageAsRead(selectedMessage.id)
-        : await getMessageById(selectedMessage.id)) || await getMessageById(selectedMessage.id))
+    ? selectedMessage.status === "unread"
+      ? (await markMessageAsRead(selectedMessage.id)) || (await getMessageById(selectedMessage.id))
+      : await getMessageById(selectedMessage.id)
     : null;
 
   return (

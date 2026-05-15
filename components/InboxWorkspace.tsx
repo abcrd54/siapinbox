@@ -1,8 +1,8 @@
 import Link from "next/link";
 
+import { CopyButton } from "@/components/CopyButton";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Card } from "@/components/ui";
-import { EmailActions } from "@/components/EmailActions";
 import { sanitizeEmailHtml } from "@/lib/sanitize-email-html";
 import { formatDate, truncate } from "@/lib/utils";
 
@@ -12,8 +12,8 @@ interface AddressItem {
   label: string | null;
   project: string | null;
   status: string;
-  total_messages: number;
-  unread_messages: number;
+  total_messages?: number;
+  unread_messages?: number;
 }
 
 interface MessageItem {
@@ -72,15 +72,15 @@ export function InboxWorkspace({
                           {address.label || address.project || "No label"}
                         </div>
                       </div>
-                      <div className={`shrink-0 rounded-md px-2 py-1 text-xs font-semibold ${address.unread_messages ? "bg-warn text-white" : "bg-slate-100 text-muted"}`}>
-                        {address.unread_messages}
-                      </div>
+                      {typeof address.unread_messages === "number" ? (
+                        <div className={`shrink-0 rounded-md px-2 py-1 text-xs font-semibold ${address.unread_messages ? "bg-warn text-white" : "bg-slate-100 text-muted"}`}>
+                          {address.unread_messages}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="flex items-center justify-between">
                       <StatusBadge value={address.status} />
-                      <div className="text-xs text-muted">
-                        {address.total_messages} email
-                      </div>
+                      {typeof address.total_messages === "number" ? <div className="text-xs text-muted">{address.total_messages} email</div> : null}
                     </div>
                   </div>
                 </Link>
@@ -138,6 +138,7 @@ export function InboxWorkspace({
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="text-xl font-semibold">{selectedEmail.subject || "(Tanpa subject)"}</h2>
                     <StatusBadge value={selectedEmail.status} />
+                    <CopyButton value={selectedEmail.to_email} label="Copy address" className="h-8 bg-white text-ink ring-1 ring-line hover:bg-slate-50" />
                   </div>
                   <div className="mt-3 grid gap-1 text-sm text-slate-600">
                     <div>
@@ -145,16 +146,6 @@ export function InboxWorkspace({
                     </div>
                     <div>Ke: {selectedEmail.to_email}</div>
                     <div>Diterima: {formatDate(selectedEmail.received_at)}</div>
-                  </div>
-                </div>
-                <div className="xl:min-w-[320px]">
-                  <div className="mb-2 text-xs font-semibold uppercase text-muted">Quick Actions</div>
-                  <div className="rounded-lg border border-line bg-white p-3">
-                    <EmailActions
-                      emailId={selectedEmail.id}
-                      currentLabel={selectedEmail.label}
-                      compact
-                    />
                   </div>
                 </div>
               </div>

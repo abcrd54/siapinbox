@@ -1,3 +1,4 @@
+import { CopyButton } from "@/components/CopyButton";
 import { sanitizeEmailHtml } from "@/lib/sanitize-email-html";
 import { formatDate } from "@/lib/utils";
 
@@ -30,6 +31,7 @@ export function EmailDetail({
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-xl font-semibold">{email.subject || "(Tanpa subject)"}</h2>
             <StatusBadge value={email.status} />
+            <CopyButton value={email.to_email} label="Copy address" className="h-8 bg-white text-ink ring-1 ring-line hover:bg-slate-50" />
           </div>
           <div className="mt-3 grid gap-2 text-sm text-slate-600">
             <div>Dari: {email.from_name ? `${email.from_name} <${email.from_email}>` : email.from_email}</div>

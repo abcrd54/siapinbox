@@ -1,19 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Button, Input } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { CopyButton } from "@/components/CopyButton";
 
 export function QuickCreateAddress() {
   const router = useRouter();
-  const [prefix, setPrefix] = useState("inbox");
   const [pending, setPending] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function createAddress() {
     setPending(true);
     setFeedback(null);
 
@@ -21,8 +20,7 @@ export function QuickCreateAddress() {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ prefix })
+      }
     });
 
     const result = await response.json();
@@ -44,14 +42,8 @@ export function QuickCreateAddress() {
   }
 
   return (
-    <form className="flex flex-col gap-2 md:flex-row md:items-center" onSubmit={onSubmit}>
-      <Input
-        value={prefix}
-        onChange={(event) => setPrefix(event.target.value)}
-        placeholder="prefix"
-        className="min-w-44"
-      />
-      <Button type="submit" disabled={pending}>
+    <div className="flex flex-col gap-2 md:flex-row md:items-center">
+      <Button type="button" onClick={createAddress} disabled={pending}>
         {pending ? "Membuat..." : "New Address"}
       </Button>
       <Link
@@ -60,7 +52,12 @@ export function QuickCreateAddress() {
       >
         API Keys
       </Link>
-      {feedback ? <div className="text-xs text-muted">{feedback}</div> : null}
-    </form>
+      {feedback ? (
+        <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
+          <span>{feedback}</span>
+          <CopyButton value={feedback} label="Copy email" className="h-8 bg-white text-ink ring-1 ring-line hover:bg-slate-50" />
+        </div>
+      ) : null}
+    </div>
   );
 }

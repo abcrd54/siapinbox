@@ -1,3 +1,4 @@
+import { CopyButton } from "@/components/CopyButton";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Card } from "@/components/ui";
 import { formatDate } from "@/lib/utils";
@@ -24,6 +25,7 @@ export function EmailAddressHeader({
         <div className="flex flex-wrap items-center gap-2">
           <h2 className="text-xl font-semibold">{address.email}</h2>
           <StatusBadge value={address.status} />
+          <CopyButton value={address.email} label="Copy email" className="h-8 bg-white text-ink ring-1 ring-line hover:bg-slate-50" />
         </div>
         <div className="grid gap-2 text-sm text-slate-600">
           <div>Label: {address.label || "-"}</div>

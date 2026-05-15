@@ -105,6 +105,19 @@ export async function getEmailAddresses(filters?: {
   }));
 }
 
+export async function getEmailAddressesBasic() {
+  const { data, error } = await supabaseAdmin
+    .from("email_addresses")
+    .select("id, email, label, project, status")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw error;
+  }
+
+  return (data || []) as Pick<EmailAddressRecord, "id" | "email" | "label" | "project" | "status">[];
+}
+
 export async function getEmailAddressById(id: string) {
   const { data, error } = await supabaseAdmin
     .from("email_addresses")
