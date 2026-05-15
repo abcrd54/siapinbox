@@ -112,7 +112,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
   "message_id": "<message-id>",
   "from_email": "sender@example.com",
   "from_name": "Sender Name",
-  "to_email": "lead-8xk29@${env.appDomain}",
+  "to_email": "lead@${env.appDomain}",
   "subject": "Test Email",
   "text_body": "Hello from email",
   "html_body": "<p>Hello from email</p>",
@@ -130,7 +130,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
     "message_id": "<message-id>",
     "from_email": "sender@example.com",
     "from_name": "Sender Name",
-    "to_email": "lead-8xk29@${env.appDomain}",
+    "to_email": "lead@${env.appDomain}",
     "subject": "Test Email",
     "text_body": "Hello from email",
     "html_body": "<p>Hello from email</p>",
@@ -186,7 +186,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
 
                 <div className="rounded-lg bg-slate-50 p-4">
                   <div className="font-medium">POST /api/public/email-addresses/random</div>
-                  <div className="mt-2">Membuat random email address untuk automation atau OTP flow.</div>
+                  <div className="mt-2">Membuat email address dari prefix ditambah 2 digit angka acak tanpa tanda pisah.</div>
                 </div>
                 <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
 {`curl -X POST "${publicBaseUrl}/email-addresses/random" \\
@@ -202,7 +202,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   <div className="mb-2 font-medium">Response Format</div>
                   <pre className="overflow-x-auto rounded-lg bg-white p-4 text-xs text-slate-700">
 {`{
-  "email": "otp-test-7fk29@${env.appDomain}"
+  "email": "otptest42@${env.appDomain}"
 }`}
                   </pre>
                 </div>
@@ -212,7 +212,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   <div className="mt-2">Mengambil daftar message berdasarkan email address.</div>
                 </div>
                 <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-{`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/messages" \\
+{`curl "${publicBaseUrl}/email-addresses/otptest42@${env.appDomain}/messages" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
                 <div className="rounded-lg bg-slate-50 p-4">
@@ -240,7 +240,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   <div className="mt-2">Mengambil email terbaru. Cocok untuk polling OTP.</div>
                 </div>
                 <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-{`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest" \\
+{`curl "${publicBaseUrl}/email-addresses/otptest42@${env.appDomain}/latest" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
                 <div className="rounded-lg bg-slate-50 p-4">
@@ -266,7 +266,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   <div className="mt-2">Mencari OTP 4-8 digit dari beberapa email terbaru.</div>
                 </div>
                 <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-{`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-otp" \\
+{`curl "${publicBaseUrl}/email-addresses/otptest42@${env.appDomain}/latest-otp" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
                 <div className="rounded-lg bg-slate-50 p-4">
@@ -285,7 +285,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   <div className="mt-2">Mengambil semua link dari `html_body` email terakhir.</div>
                 </div>
                 <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-{`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-links" \\
+{`curl "${publicBaseUrl}/email-addresses/otptest42@${env.appDomain}/latest-links" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
                 <div className="rounded-lg bg-slate-50 p-4">
@@ -310,7 +310,7 @@ VERCEL_AUTOMATION_BYPASS_SECRET=<optional if deployment protection is enabled>`}
                   <div className="mt-2">Mengambil link utama dari email terakhir, cocok untuk verify/confirm/reset link.</div>
                 </div>
                 <pre className="overflow-x-auto rounded-lg bg-slate-950 p-4 text-xs text-slate-100">
-{`curl "${publicBaseUrl}/email-addresses/otp-test-7fk29@${env.appDomain}/latest-primary-link" \\
+{`curl "${publicBaseUrl}/email-addresses/otptest42@${env.appDomain}/latest-primary-link" \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                 </pre>
                 <div className="rounded-lg bg-slate-50 p-4">

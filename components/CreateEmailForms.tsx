@@ -71,7 +71,7 @@ export function CreateEmailForms() {
       <Card className="space-y-5 rounded-xl border border-line bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white">
         <div>
           <h2 className="text-lg font-semibold">Create Address</h2>
-          <p className="mt-1 text-sm text-white/70">Buat alamat random untuk testing cepat atau custom untuk alamat tetap.</p>
+          <p className="mt-1 text-sm text-white/70">Buat alamat dari prefix atau local part tetap, lalu pantau inbox-nya.</p>
         </div>
 
         <div className="grid grid-cols-2 gap-2 rounded-xl bg-white/10 p-1">
@@ -93,14 +93,14 @@ export function CreateEmailForms() {
 
         <div className="rounded-xl border border-white/10 bg-white/10 p-4 text-sm text-white/80">
           {mode === "random"
-            ? "Format random: {prefix}-{random}@domain. Cocok untuk OTP, lead, dan test automation."
+            ? "Format random: {prefix}NN@domain. Dua digit angka acak akan ditambahkan tanpa tanda pisah."
             : "Format custom: local_part@domain. Cocok untuk inbox tetap seperti support, demo, atau client-specific."}
         </div>
 
         <div className="grid gap-3 text-sm text-white/80">
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Quick Use</div>
-            <div className="mt-2">Pakai `random` untuk flow OTP dan test automation yang butuh alamat baru setiap run.</div>
+            <div className="mt-2">Pakai mode `random` untuk hasil seperti `riskiridho11` atau `otptest42` tanpa tanda `-`.</div>
           </div>
           <div className="rounded-xl border border-white/10 bg-white/5 p-4">
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">Persistent Use</div>
@@ -111,7 +111,7 @@ export function CreateEmailForms() {
 
       <Card className="rounded-xl p-0 overflow-hidden">
         <div className="border-b border-line bg-gradient-to-r from-slate-50 to-white px-6 py-5">
-          <h3 className="text-lg font-semibold">{mode === "random" ? "Generate Random Address" : "Create Custom Address"}</h3>
+          <h3 className="text-lg font-semibold">{mode === "random" ? "Create Random Address" : "Create Custom Address"}</h3>
           <p className="mt-1 text-sm text-muted">Isi metadata seperlunya agar inbox lebih mudah dicari dan dikelola.</p>
         </div>
 

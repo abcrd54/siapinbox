@@ -25,8 +25,9 @@ export function buildEmailAddress(localPart: string) {
 
 export function generateLocalPart(prefix = "inbox") {
   const cleanPrefix = sanitizeLocalPartInput(prefix) || "inbox";
-  const random = Math.random().toString(36).slice(2, 7);
-  const localPart = `${cleanPrefix}-${random}`.slice(0, 64);
+  const randomDigits = Math.floor(Math.random() * 100).toString().padStart(2, "0");
+  const maxPrefixLength = 64 - randomDigits.length;
+  const localPart = `${cleanPrefix.slice(0, maxPrefixLength)}${randomDigits}`;
 
   ensureValidLocalPart(localPart);
 
@@ -34,7 +35,7 @@ export function generateLocalPart(prefix = "inbox") {
 }
 
 export async function generateUniqueLocalPart(prefix = "inbox") {
-  for (let attempt = 0; attempt < 10; attempt += 1) {
+  for (let attempt = 0; attempt < 20; attempt += 1) {
     const localPart = generateLocalPart(prefix);
     const email = buildEmailAddress(localPart);
     const { data, error } = await supabaseAdmin
@@ -52,5 +53,5 @@ export async function generateUniqueLocalPart(prefix = "inbox") {
     }
   }
 
-  throw new Error("Failed to generate unique local part");
+  throw new Error("Failed to generate unique email address");
 }
